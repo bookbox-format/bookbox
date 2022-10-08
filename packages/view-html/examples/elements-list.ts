@@ -19,6 +19,8 @@ ${_.em`Em`}
 
 ${_.code.lang("javascript")`const x = 1 + Math.random();`}
 
+${_.code.lang("javascript")`const x = 'longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong'`}
+
 ${_.code.lang('typescript').key("code")`
 import { HtmlToken } from "./model";
 import hljs from 'highlight.js';

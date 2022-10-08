@@ -31,6 +31,6 @@
     "@bookbox/generator-js": "../packages/generator-js",
     "@bookbox/generator-js": "^0.1.0",
     "@bookbox/view-html": "../packages/view-html",
-    "@bookbox/view-html": "^0.1.0"
+    "@bookbox/view-html": "^0.1.1"
   }
 }

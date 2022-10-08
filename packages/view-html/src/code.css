@@ -23,7 +23,6 @@
   /* diff */
   --book-box-color-diff-add: rgba(0, 255, 106, 0.3);
   --book-box-color-diff-remove: rgba(255, 0, 0, 0.3);
-
 }
 
 .book-box_theme-dark {
@@ -35,12 +34,13 @@
   --book-box-color-code-function: var(--book-box-color-name-blue-sky);
 }
 
-.book-box-code code {
+.book-box-code pre {
   color: var(--book-box-color-text);
   white-space: pre-wrap;
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
+  overflow: auto;
 
   tab-size: 4;
   hyphens: none;
@@ -77,7 +77,7 @@
 }
 
 .hljs-number {
-  color: var(--book-box-color-code-number)
+  color: var(--book-box-color-code-number);
 }
 
 .hljs-meta .hljs-string,
@@ -125,7 +125,7 @@
 
 .hljs-template-variable,
 .hljs-variable {
-  color: var(--book-box-color-code-variable)
+  color: var(--book-box-color-code-variable);
 }
 
 .hljs-attr,
