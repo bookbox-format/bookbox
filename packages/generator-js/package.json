@@ -1,0 +1,36 @@
+{
+  "name": "@bookbox/generator-js",
+  "version": "0.1.0",
+  "description": "Bookbox generator for js code",
+  "main": "build/cjs/index.js",
+  "module": "build/esm/index.js",
+  "types": "build/esm/index.d.ts",
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "scripts": {
+    "build-cjs": "tsc -p tsconfig-publish-cjs.json",
+    "build-esm": "tsc -p tsconfig-publish-esm.json",
+    "build": "npm run build-cjs; npm run build-esm",
+    "listen-deps": "onchange -d 3000 'node_modules/@bookbox/core/build/esm/index.js' --no-exclude -- npm run build",
+    "listen-code": "onchange -d 3000 'src/**/*' -- npm run build",
+    "dev": "npm run listen-deps & npm run listen-code"
+  },
+  "keywords": [
+    "bookbox",
+    "generator",
+    "js"
+  ],
+  "author": "Alexandr Nikolaichev",
+  "license": "MIT",
+  "dependenciesComment": "reorder dependencies for priority, last order will be actual",
+  "dependencies": {
+    "@bookbox/core": "../core",
+    "@bookbox/core": "0.1.0"
+  },
+  "devDependencies": {
+    "onchange": "^7.1.0",
+    "typescript": "^4.6.4"
+  }
+}

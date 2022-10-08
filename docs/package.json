@@ -1,0 +1,36 @@
+{
+  "name": "@bookbox/docs",
+  "private": true,
+  "version": "0.0.1",
+  "source": "src/index.ts",
+  "main": "dist/docs.cjs.js",
+  "module": "dist/docs.esm.js",
+  "type": "module",
+  "scripts": {
+    "copy-resources": "find src -type f ! -name '*.ts' -a ! -name '*.mdx' -exec cp '{}' dist ';'",
+    "build-code": "vite build; npm run copy-resources; cp ./dist/docs.es.js ./dist/docs.es.mjs",
+    "build-schema": "SOURCE=../dist/docs.es.mjs TARGET_PREFIX=./dist/docs node scripts/generateSchema.mjs",
+    "build-view": "node scripts/genHtmlDocs.mjs",
+    "build": "npm run build-code; npm run build-schema; npm run build-view",
+    "listen-deps": "onchange -d 3000 'node_modules/@bookbox/core/build/esm/index.js' 'node_modules/@bookbox/generator-js/build/esm/index.js' 'node_modules/@bookbox/view-html/build/esm/index.js' --no-exclude -- npm run build",
+    "listen-code": "onchange -d 1000 'src/**/*.ts' 'src/**/*.mdx' -- npm run build",
+    "dev": "npm run listen-deps & npm run listen-code"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.42",
+    "mermaid": "^9.1.6",
+    "onchange": "^7.1.0",
+    "typescript": "^4.5.4",
+    "vite": "^3.0.9",
+    "yaml": "^2.1.1"
+  },
+  "dependenciesComment": "reorder dependencies for priority, last order will be actual",
+  "dependencies": {
+    "@bookbox/core": "../packages/core",
+    "@bookbox/core": "^0.1.0",
+    "@bookbox/generator-js": "../packages/generator-js",
+    "@bookbox/generator-js": "^0.1.0",
+    "@bookbox/view-html": "../packages/view-html",
+    "@bookbox/view-html": "^0.1.0"
+  }
+}

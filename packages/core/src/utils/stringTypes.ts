@@ -1,0 +1,1 @@
+export type StringUnionHint<T extends string> = T | (string & {});
