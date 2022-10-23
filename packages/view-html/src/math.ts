@@ -1,9 +1,7 @@
-// @ts-ignore
-
-import { renderToString } from "katex";
+import katex from "katex";
 
 export function renderFormula(text: string, isBlock = false) {
-  return renderToString(text, {
+  return katex.renderToString(text, {
     displayMode: isBlock,
     throwOnError: false,
     output: "html",
