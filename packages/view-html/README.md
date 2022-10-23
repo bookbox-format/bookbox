@@ -45,6 +45,20 @@ Without bundlers in index.html
   ...
 ```
 
+To track the page labels and match them with URL, you need to connect the observer
+```typescript
+import { getNavigation } from '@bookbox/view-html';
+
+// only after building the DOM
+const { observeNavigation, disconnectNavigation } = getNavigation();
+
+// start/init/mount
+observeNavigation();
+
+// end/clear/unmount
+disconnectNavigation()
+
+```
 
 Create book:
 ```typescript

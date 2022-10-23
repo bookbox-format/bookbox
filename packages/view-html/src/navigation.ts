@@ -214,5 +214,15 @@ export function getNavigation(bookHtmlContainer: Element = document.body) {
     observePages();
   };
 
-  return { headersObserver, observeNavigation };
+  const disconnectNavigation = () => {
+    headersObserver.disconnect();
+    pageObserver.disconnect();
+  };
+
+  return {
+    headersObserver,
+    pageObserver,
+    observeNavigation,
+    disconnectNavigation,
+  };
 }
