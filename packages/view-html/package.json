@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/view-html",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Bookbox view for html",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
