@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bookbox — e-book format",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",

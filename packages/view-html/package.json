@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/view-html",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Bookbox view for html",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -25,7 +25,7 @@
   ],
   "dependenciesComment": "reorder dependencies for priority, last order will be actual",
   "dependencies": {
-    "@bookbox/core": "0.1.0",
+    "@bookbox/core": "0.1.1",
     "highlight.js": "^11.6.0",
     "katex": "^0.15.0"
   },
