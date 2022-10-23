@@ -91,9 +91,11 @@ function calculateCounters(
   }
 }
 
+export type ResourceMap = Map<string, { src: string }>;
+
 function calculateResources(
   schema: BookSchema,
-  resourceMap: Map<string, { src: string }> = new Map()
+  resourceMap: ResourceMap = new Map()
 ): void {
   for (const item of schema) {
     if (typeof item === "string") {
@@ -102,7 +104,7 @@ function calculateResources(
     if (item.name === "resource") {
       const { path, src, type } = item.props;
       if (path && src) {
-        const resourceKey = `${type ? `${type}/` : ""}${path}`;
+        const resourceKey = `${type ? `${type}:` : ""}${path}`;
         resourceMap.set(resourceKey, { src: `${src}` });
       }
       continue;
@@ -114,7 +116,7 @@ function calculateResources(
     ) {
       // локальный путь
       const localPath = item.props.src;
-      const resourcePath = `${item.name}/${localPath}`;
+      const resourcePath = `${item.name}:${localPath}`;
       const typeSrc = resourceMap.get(resourcePath)?.src;
       const src = resourceMap.get(localPath)?.src;
       if (!src && !typeSrc) {
@@ -160,21 +162,23 @@ function prepareSchema(schema: BookSchema) {
 }
 
 export type CreateBookParams<Token> = {
+  schema: BookSchema;
   builder: BookBuilderParams<Token>;
   externalBuilder?: ExternalBuilder<Token>;
-  schema: BookSchema;
+  resourceMap?: ResourceMap;
 };
 
 export function createBook<Token>({
+  schema: originalSchema,
   builder: builderParams,
   externalBuilder,
-  schema: originalSchema,
+  resourceMap,
 }: CreateBookParams<Token>): BookData<Token> {
   let schema = JSON.parse(JSON.stringify(originalSchema));
   const builder = createBookBuilder(builderParams);
   addKeysToSchema(schema);
   calculateCounters(schema);
-  calculateResources(schema);
+  calculateResources(schema, resourceMap);
   prepareSchema(schema);
   const linkedSchema = getBookLinkedSchema(schema, true);
   const tokensSchema = getSchemaFromLinkedList(linkedSchema.tree);

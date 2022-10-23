@@ -17,6 +17,7 @@ const {
     builder, // builder for view (html, markdown, ...)
     externalBuilder, // optional, for extensions
     schema, // ast tree from generator or raw tree from json/yaml
+    resourceMap, // optional, for custom resource paths
 });
 ```
 
