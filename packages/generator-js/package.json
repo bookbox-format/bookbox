@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/generator-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Bookbox generator for js code",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -27,7 +27,7 @@
   "dependenciesComment": "reorder dependencies for priority, last order will be actual",
   "dependencies": {
     "@bookbox/core": "../core",
-    "@bookbox/core": "0.1.1"
+    "@bookbox/core": "0.2.0"
   },
   "devDependencies": {
     "onchange": "^7.1.0",
