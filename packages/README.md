@@ -1,6 +1,7 @@
-# Стандартные пакеты bookbox
+# Standard packages for bookbox
 
-Каждый пакет располагается в пространстве имён `@bookbox`, например `@bookbox/view-html`.
+Each package is located in the namespace `@bookbox`, for example `@bookbox/view-html`'.
 
-Все пакеты для генераторов начинаются с префикса `generator-`, все представления — с `view-`.
+All packages for generators start with the prefix `generator-`, all views start with `view—`.
 
+All packages for the package collection start with the prefix `preset-`.

@@ -1,0 +1,32 @@
+{
+  "name": "@bookbox/preset-web",
+  "version": "0.1.0",
+  "description": "Bookbox web preset",
+  "main": "build/cjs/index.js",
+  "module": "build/esm/index.js",
+  "types": "build/esm/index.d.ts",
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bookbox-format/bookbox.git",
+    "directory": "packages/preset-web"
+  },
+  "scripts": {
+    "build-cjs": "tsc -p tsconfig-publish-cjs.json",
+    "build-esm": "tsc -p tsconfig-publish-esm.json",
+    "build": "npm run build-cjs; npm run build-esm"
+  },
+  "keywords": [
+    "bookbox"
+  ],
+  "author": "Alexandr Nikolaichev",
+  "license": "MIT",
+  "dependencies": {
+    "@bookbox/core": "^0.2.0",
+    "@bookbox/generator-js": "^0.1.2",
+    "@bookbox/view-html": "^0.1.5"
+  }
+}

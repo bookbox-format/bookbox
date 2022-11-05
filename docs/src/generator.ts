@@ -1,4 +1,4 @@
-import type { BookRawItem, FBook } from "@bookbox/generator-js";
+import { BookRawItem, FBook } from "@bookbox/preset-web";
 
 export const Generator: FBook = (api) => {
   const { header, book, code, math, item, list, area, link } = api;

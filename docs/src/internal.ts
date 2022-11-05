@@ -1,4 +1,5 @@
-import type { FBook } from '@bookbox/generator-js';
+import type { FBook } from '@bookbox/preset-web';
+
 import {Model} from './model';
 import {Generator} from './generator';
 import {View} from './view';

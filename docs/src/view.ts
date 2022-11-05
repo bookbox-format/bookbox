@@ -1,4 +1,4 @@
-import type { FBook } from '@bookbox/generator-js';
+import type { FBook } from '@bookbox/preset-web';
 
 export const View: FBook = api => {
     const { header, book, link, code } = api;

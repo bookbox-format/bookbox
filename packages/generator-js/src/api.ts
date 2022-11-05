@@ -5,10 +5,8 @@ import {
   BookElementProps,
   BookElementSchema,
   BookItem,
-  BookLayoutView,
-  BookSchema,
-  BookScope,
   Primitive,
+  ElementNamespace,
 } from "@bookbox/core";
 
 /**
@@ -78,8 +76,7 @@ export type LevelApi<
     : Name]: BookElementApi<ElementsRecord[Name]>;
 };
 
-export type LevelApiName = "format" | "web";
-export const LevelApiNameList: LevelApiName[] = ["format", "web"];
+export const LevelApiNameList: ElementNamespace[] = ["format", "web"];
 export const LevelApiNameSet: Set<string> = new Set(LevelApiNameList);
 
 export type LevelElementsApi = {
