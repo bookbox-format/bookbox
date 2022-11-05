@@ -1,4 +1,4 @@
-import { FBook } from '@bookbox/generator-js';
+import type { FBook } from '@bookbox/preset-web';
 
 import {Properties} from './properties';
 

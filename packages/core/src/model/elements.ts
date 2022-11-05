@@ -10,8 +10,6 @@ export type BookElements = MetaElements &
   WebElements;
 
 export type ElementNamespace = 'format' | 'web';
-export const LevelApiNameList: ElementNamespace[] = ['format', 'web'];
-export const LevelApiNameSet: Set<string> = new Set(LevelApiNameList);
 
 export type LevelBookElements<T extends ElementNamespace> = Pick<
   BookElements,

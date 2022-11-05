@@ -1,4 +1,4 @@
-import { createHtmlBook, getBookBoxHtmlDocument } from "@bookbox/view-html";
+import { createHtmlBook, getBookBoxHtmlDocument } from "@bookbox/preset-web";
 import { readFileSync, writeFileSync } from "fs";
 
 const schema = JSON.parse(readFileSync("./dist/docs.json").toString());

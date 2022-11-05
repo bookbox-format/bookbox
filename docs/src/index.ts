@@ -1,4 +1,4 @@
-import type { BookApi } from "@bookbox/generator-js";
+import type { BookApi } from "@bookbox/preset-web";
 import {Internal} from './internal';
 
 const logo = './logo.svg';

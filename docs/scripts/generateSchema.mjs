@@ -1,4 +1,5 @@
-import { getBookSchema } from "@bookbox/generator-js";
+import { getBookSchema } from "@bookbox/preset-web";
+
 import { writeFileSync } from "fs";
 import YAML from 'yaml'
 
