@@ -40,7 +40,7 @@ Without bundlers in index.html
     <link rel="stylesheet" href="/path/to/htmlBook.css" />
     <link rel="stylesheet" href="/path/to/code.css" />
     <link rel="stylesheet" href="/path/to/katex.css" />
-    <script src="/path/to/prepare.ts" type="module"/>
+    <script src="/path/to/prepare.js" type="module"/>
   </head>
   ...
 ```

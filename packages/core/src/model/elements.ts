@@ -1,5 +1,5 @@
-import { StringUnionHint } from "../utils";
-import { BookElement, BookScope, Primitive, BookElementProps } from "./model";
+import { StringUnionHint } from '../utils';
+import { BookElement, BookScope, Primitive, BookElementProps } from './model';
 
 export type BookElements = MetaElements &
   BlockElements &
@@ -9,21 +9,20 @@ export type BookElements = MetaElements &
   TextFormatElements &
   WebElements;
 
-type i = keyof BookElements;
-
-export type ElementNamespace = "format" | "web";
-export const LevelApiNameList: ElementNamespace[] = ["format", "web"];
+export type ElementNamespace = 'format' | 'web';
+export const LevelApiNameList: ElementNamespace[] = ['format', 'web'];
 export const LevelApiNameSet: Set<string> = new Set(LevelApiNameList);
 
-export type LevelBookElements<T extends ElementNamespace> = Pick<BookElements, Extract<keyof BookElements, `${T}.${string}`>>;
+export type LevelBookElements<T extends ElementNamespace> = Pick<
+  BookElements,
+  Extract<keyof BookElements, `${T}.${string}`>
+>;
 
 export type BookElementsWithoutLevel<
   ElementsRecord extends Record<keyof ElementsRecord, BookElement<string>>,
   LevelName extends string,
 > = {
-  [Name in keyof ElementsRecord as Name extends `${LevelName}.${infer X}`
-    ? X
-    : Name]: ElementsRecord[Name];
+  [Name in keyof ElementsRecord as Name extends `${LevelName}.${infer X}` ? X : Name]: ElementsRecord[Name];
 };
 
 type GetElements<T extends Record<string, BookElementProps>> = {
@@ -35,7 +34,7 @@ export type MetaElements = GetElements<{
   authors: {};
 }>;
 
-export type LayoutPosition = "inline" | "end" | "start" | "center" | "full";
+export type LayoutPosition = 'inline' | 'end' | 'start' | 'center' | 'full';
 
 export type LayoutProps = {
   block?: boolean;
@@ -94,19 +93,17 @@ export type BlockElements = GetElements<{
 }>;
 
 export const defaultBlockNameList: (keyof BlockElements)[] = [
-  "strong",
-  "em",
-  "header",
-  "code",
-  "label",
-  "link",
-  "tooltip",
-  "math",
-  "external",
+  'strong',
+  'em',
+  'header',
+  'code',
+  'label',
+  'link',
+  'tooltip',
+  'math',
+  'external',
 ];
-export const defaultBlockNames: Set<keyof BlockElements> = new Set(
-  defaultBlockNameList
-);
+export const defaultBlockNames: Set<keyof BlockElements> = new Set(defaultBlockNameList);
 
 export type MediaElements = GetElements<{
   image: MediaProps & SizeProps & LayoutProps;
@@ -115,22 +112,18 @@ export type MediaElements = GetElements<{
 }>;
 
 export type TextFormatElements = GetElements<{
-  "format.b": LayoutProps;
-  "format.i": LayoutProps;
-  "format.sup": LayoutProps;
-  "format.sub": LayoutProps;
-  "format.pre": LayoutProps;
-  "format.small": LayoutProps;
+  'format.b': LayoutProps;
+  'format.i': LayoutProps;
+  'format.sup': LayoutProps;
+  'format.sub': LayoutProps;
+  'format.pre': LayoutProps;
+  'format.small': LayoutProps;
 }>;
 
 export type WebElements = GetElements<{
-  "web.video": { type?: StringUnionHint<"youtube" | "vimeo"> } & MediaProps &
-    SizeProps &
-    LayoutProps;
-  "web.audio": { type?: StringUnionHint<"soundcloud"> } & MediaProps & SizeProps & LayoutProps;
-  "web.message": { type?: StringUnionHint<"telegram" | "twitter"> } & MediaProps &
-    SizeProps &
-    LayoutProps;
+  'web.video': { type?: StringUnionHint<'youtube' | 'vimeo'> } & MediaProps & SizeProps & LayoutProps;
+  'web.audio': { type?: StringUnionHint<'soundcloud'> } & MediaProps & SizeProps & LayoutProps;
+  'web.message': { type?: StringUnionHint<'telegram' | 'twitter'> } & MediaProps & SizeProps & LayoutProps;
 }>;
 
 /**

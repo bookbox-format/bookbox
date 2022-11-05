@@ -1,5 +1,5 @@
-import { ExternalBuilder } from "./external";
-import { BookBuilder, BookElementSchema, BookSchema, BookStore } from "./model";
+import { ExternalBuilder } from './external';
+import { BookBuilder, BookElementSchema, BookSchema, BookStore } from './model';
 
 export function getStore<T>({
   builder,
@@ -25,12 +25,10 @@ export function getStore<T>({
   return result;
 }
 
-function getElementsByKeys(
-  schema: BookSchema
-): Record<string, BookElementSchema> {
+export function getElementsByKeys(schema: BookSchema): Record<string, BookElementSchema> {
   let result: Record<string, BookElementSchema> = {};
   for (const item of schema) {
-    if (typeof item === "string") {
+    if (typeof item === 'string') {
       continue;
     }
     result[item.props.key as string] = item;
