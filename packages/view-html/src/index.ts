@@ -1,9 +1,12 @@
 export * from './htmlBook';
 export * from './navigation';
-export * from './bookTemplate';
+export * from './generated/bookTemplate';
 export * from './generateHtml';
 export * from './htmlBookSettings';
 export * from './layout';
 export * from './math';
 export * from './model';
 export * from './utils';
+export * as css from './dynamicCss';
+export * from './init';
+export * from './render';

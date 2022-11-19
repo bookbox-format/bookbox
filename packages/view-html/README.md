@@ -7,7 +7,7 @@ npm i @bookbox/view-html
 ## Usage
 
 ### Browser
-Styles and initial scripts for the browser must be connected separately.
+Styles and initial script for the browser must be connected separately.
 
 The connection method is different for bundlers and native technologies.
 
@@ -15,19 +15,16 @@ The connection method is different for bundlers and native technologies.
 With webpack/vite/...
 ```typescript
 // index.ts
+import { css, browserInit } from '@bookbox/view-html';
 
-// for navigation
-import '@bookbox/view-html/build/esm/prepare';
-
-// basic styles
-import '@bookbox/view-html/build/styles/htmlBook.css';
+// init command
+browserInit();
 
 // only if you use code blocks
-import '@bookbox/view-html/build/styles/code.css';
+css.code();
 
 // only if you use mathematical formulas
-// to explicitly import, run the command `npm i katex` or see https://katex.org/docs/browser.html
-import 'katex/dist/katex.css';
+css.math();
 ```
 
 
@@ -37,33 +34,25 @@ Without bundlers in index.html
 <html>
   <head>
     ...
+    <!-- '@bookbox/view-html/dist/styles/htmlBook.css -->
     <link rel="stylesheet" href="/path/to/htmlBook.css" />
+
+    <!-- '@bookbox/view-html/dist/styles/code.css -->
     <link rel="stylesheet" href="/path/to/code.css" />
+
+    <!-- 'katex/dist/katex.css -->
     <link rel="stylesheet" href="/path/to/katex.css" />
-    <script src="/path/to/prepare.js" type="module"/>
+
+    <!-- browserInit(); -->
+    <script src="/path/to/index_with_browserInit.js" type="module"/>
   </head>
   ...
-```
-
-To track the page labels and match them with URL, you need to connect the observer
-```typescript
-import { getNavigation } from '@bookbox/view-html';
-
-// only after building the DOM
-const { observeNavigation, disconnectNavigation } = getNavigation();
-
-// start/init/mount
-observeNavigation();
-
-// end/clear/unmount
-disconnectNavigation()
-
 ```
 
 Create book:
 ```typescript
 import { FBook, getBookSchema } from "@bookbox/generator-js";
-import { createHtmlBook, getBookBoxHtmlDocument } from "@bookbox/view-html";
+import { createHtmlBook, getBookBoxHtmlDocument, render } from "@bookbox/view-html";
 
 export const exampleBook: FBook = ({book, title, math}) => book.root`
 ${title`exampleBook`}
@@ -72,14 +61,14 @@ ${math`E = mc^2`}
 `;
 
 const { schema } = getBookSchema({ book: exampleBook });
-const bookData = createHtmlBook({ schema });
 
-document.body.innerHtml = getBookBoxHtml({ bookData });
+render({ element: document.body, bookData: createHtmlBook({ schema }) });
 
 ```
 
 ### NodeJS
 Styles and initial scripts for NodeJS are already contained in the html document template.
+Styles for code and math will be included in the document automatically, depending on the use of code or math elements.
 
 In NodeJS with typescript and modules
 ```typescript

@@ -73,7 +73,7 @@
 }
 
 .book-box_theme-dark {
-  --book-box-color-background: rgb(19, 19, 19);
+  --book-box-color-background: rgb(29, 29, 29);
   --book-box-color-background-hover: rgb(41, 45, 49);
   --book-box-color-background-accent: rgb(67, 73, 82);
   --book-box-color-text: rgb(224, 224, 224);

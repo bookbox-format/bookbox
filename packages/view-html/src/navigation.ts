@@ -1,15 +1,11 @@
 type CurrentNavigationData = { index: number | null; visible: Set<number> };
 
-const contentsSelector = ".book-box_layout-settings-contents";
-const currentHeaderClass = "book-box_layout-settings-contents-item-current";
+const contentsSelector = '.book-box_layout-settings-contents';
+const currentHeaderClass = 'book-box_layout-settings-contents-item-current';
 const currentHeaderSelector = `.${currentHeaderClass}`;
 
 const getHeadersNavigationCallback =
-  (
-    listHeaders: HTMLElement[],
-    listHeadersMap: Map<string, number>,
-    current: CurrentNavigationData
-  ) =>
+  (listHeaders: HTMLElement[], listHeadersMap: Map<string, number>, current: CurrentNavigationData) =>
   (entries: IntersectionObserverEntry[]) => {
     const headersElem = document.querySelector(contentsSelector) as HTMLElement;
     if (!headersElem) {
@@ -37,8 +33,7 @@ const getHeadersNavigationCallback =
   };
 
 const getPagesNavigationCallback =
-  (listPagesMap: Map<string, number>, current: CurrentNavigationData) =>
-  (entries: IntersectionObserverEntry[]) => {
+  (listPagesMap: Map<string, number>, current: CurrentNavigationData) => (entries: IntersectionObserverEntry[]) => {
     const { targetIndex } = getCurrentItemIndex({
       listMap: listPagesMap,
       current,
@@ -53,28 +48,20 @@ const getPagesNavigationCallback =
     current.index = targetIndex;
   };
 
-type URLOptions = Partial<Omit<URL, "origin" | "searchParams">>;
+type URLOptions = Partial<Omit<URL, 'origin' | 'searchParams'>>;
 function getUrl(url: string | URL, options?: URLOptions) {
-  const targetUrl = typeof url === "string" ? new URL(url) : url;
+  const targetUrl = typeof url === 'string' ? new URL(url) : url;
   Object.assign(targetUrl, options ?? {});
 
   return targetUrl;
 }
 
 export function replaceHistory(options: Partial<URL>) {
-  window.history.replaceState(
-    null,
-    "",
-    getUrl(window.location.toString(), options)
-  );
+  window.history.replaceState(null, '', getUrl(window.location.toString(), options));
 }
 
 export function pushHistory(options: Partial<URL>) {
-  window.history.pushState(
-    null,
-    "",
-    getUrl(window.location.toString(), options)
-  );
+  window.history.pushState(null, '', getUrl(window.location.toString(), options));
 }
 
 function getCurrentItemIndex({
@@ -89,21 +76,20 @@ function getCurrentItemIndex({
   let overTopMaximum: number = -Infinity;
   let overBottomMinimum: number = Infinity;
   for (const entry of entries) {
-    const { isIntersecting, target, boundingClientRect, intersectionRect } =
-      entry;
+    const { isIntersecting, target, boundingClientRect, intersectionRect } = entry;
     const border = getBorder({ boundingClientRect, intersectionRect });
-    const key = (target as HTMLElement).dataset.key ?? "";
+    const key = (target as HTMLElement).dataset.key ?? '';
     const i = listMap.get(key) ?? 0;
     if (isIntersecting) {
       current.visible.add(i);
     } else {
       current.visible.delete(i);
-      if (border === "top") {
+      if (border === 'top') {
         // исчезание сверху
         if (i > overTopMaximum) {
           overTopMaximum = i;
         }
-      } else if (border === "bottom") {
+      } else if (border === 'bottom') {
         // исчезание снизу
         if (i < overBottomMinimum) {
           overBottomMinimum = i;
@@ -140,38 +126,40 @@ function getBorder({
 }: {
   boundingClientRect: DOMRectReadOnly;
   intersectionRect: DOMRectReadOnly;
-}): "top" | "bottom" {
+}): 'top' | 'bottom' {
   const { top, bottom } = boundingClientRect;
   const { top: itop, bottom: ibottom } = intersectionRect;
   if ((top ^ 0) === (itop ^ 0)) {
-    return "bottom";
+    return 'bottom';
   }
-  return "top";
+  return 'top';
+}
+
+const PAGE_PREFIX = 'page-'.length;
+
+export function getCurrentPage() {
+  const pageHash = window.location.hash;
+  const page = +pageHash.slice(PAGE_PREFIX + 1);
+  return Number.isNaN(page) ? null : page;
 }
 
 export function getNavigation(bookHtmlContainer: Element = document.body) {
   // headers navigation
 
-  const contentHeaders = bookHtmlContainer.querySelectorAll(
-    '.book-box_content [data-name="header"]'
-  );
+  const contentHeaders = bookHtmlContainer.querySelectorAll('.book-box_content [data-name="header"]');
   const listHeaders = Array.from(
-    bookHtmlContainer.querySelectorAll(
-      '.book-box_layout-settings-contents [data-name="header"]'
-    )
+    bookHtmlContainer.querySelectorAll('.book-box_layout-settings-contents [data-name="header"]'),
   ) as HTMLElement[];
 
-  const listHeadersMap = new Map(
-    listHeaders.map((elem, i) => [elem.dataset.key!, i])
-  );
+  const listHeadersMap = new Map(listHeaders.map((elem, i) => [elem.dataset.key!, i]));
   const headersCurrent: CurrentNavigationData = {
     index: null,
     visible: new Set<number>(),
   };
   const headersNavigationCallback = getHeadersNavigationCallback(
-    listHeaders.map((e) => e.parentElement!),
+    listHeaders.map(e => e.parentElement!),
     listHeadersMap,
-    headersCurrent
+    headersCurrent,
   );
   const headersObserver = new IntersectionObserver(headersNavigationCallback, {
     threshold: 0.5,
@@ -185,19 +173,19 @@ export function getNavigation(bookHtmlContainer: Element = document.body) {
   // page navigation
 
   const contentPages = Array.from(
-    bookHtmlContainer.querySelectorAll('.book-box_content [data-name=".page"]')
+    bookHtmlContainer.querySelectorAll('.book-box_content [data-name=".page"]'),
   ) as HTMLElement[];
   const listPageMap = new Map(
-    contentPages.map((elem, i) => [elem.dataset.key!, i])
+    contentPages
+      .map(elem => elem.dataset.key)
+      .filter((key): key is string => Boolean(key))
+      .map(key => [key, +key.slice(PAGE_PREFIX)]),
   );
   const pagesCurrent: CurrentNavigationData = {
     index: null,
     visible: new Set<number>(),
   };
-  const pagesNavigationCallback = getPagesNavigationCallback(
-    listPageMap,
-    pagesCurrent
-  );
+  const pagesNavigationCallback = getPagesNavigationCallback(listPageMap, pagesCurrent);
 
   const pageObserver = new IntersectionObserver(pagesNavigationCallback, {
     threshold: 0.5,

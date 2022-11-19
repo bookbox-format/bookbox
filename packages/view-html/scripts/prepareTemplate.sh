@@ -1,9 +1,18 @@
 echo "prepare"
-node scripts/copyPrepare.js
 cd scripts
 
-npx vite build
-node generate.js
-rm -Rf dist
+echo "generate html"
+mkdir preparedTemplate
 
-node removePrepare.js
+cp -Rf ../src preparedTemplate
+mv preparedTemplate/src/bookTemplate.html preparedTemplate/src/index.html
+npx vite build
+node generateBookTemplate.js
+
+rm -Rf preparedTemplate
+
+echo "css to js"
+node prepareCss.js
+node prepareKatex.js
+
+echo "Done!"
