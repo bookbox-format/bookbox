@@ -12,7 +12,7 @@ const actions = {
 
 const className = "book-box_highlight";
 
-export function goto(selector: string, options?: GoToOptions): void {
+function goto(selector: string, options?: GoToOptions): void {
   const node = document.querySelector(selector);
   if (!node) return;
   const { useHistory = false, url } = options ?? {};

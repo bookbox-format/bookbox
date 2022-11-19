@@ -489,6 +489,7 @@ export const htmlSynteticElements: BookBuilderParams<HtmlToken>["synteticElement
         `<span
                 id="page-${count}"
                 class="book-box-page book-box_clickable"
+                data-layout="top"
                 data-page="${count}"
                 data-key="${key}"
                 data-name=".page"

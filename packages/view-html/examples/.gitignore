@@ -1,2 +1,6 @@
-elements-list.html
-elements-list.json
+*.html
+*.json
+
+browser/resources
+nodejs/resources
+.DS_Store
