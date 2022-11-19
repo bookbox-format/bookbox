@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/preset-web",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bookbox web preset",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -27,6 +27,6 @@
   "dependencies": {
     "@bookbox/core": "^0.2.0",
     "@bookbox/generator-js": "^0.1.2",
-    "@bookbox/view-html": "^0.1.5"
+    "@bookbox/view-html": "^0.2.0"
   }
 }
