@@ -1,4 +1,4 @@
-# Standard packages for bookbox
+# Standard ts/js packages for bookbox
 
 Each package is located in the namespace `@bookbox`, for example `@bookbox/view-html`'.
 

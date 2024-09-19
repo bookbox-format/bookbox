@@ -1,0 +1,28 @@
+{
+  "blocks": [
+    {
+      "text": "\njust string\n\n"
+    },
+    {
+      "tag": {
+        "name": "a",
+        "body": {
+          "blocks": [
+            {
+              "text": "ya"
+            }
+          ]
+        },
+        "attrList": [
+          {
+            "name": "href",
+            "value": "ya.ru"
+          }
+        ]
+      }
+    },
+    {
+      "text": "\n"
+    }
+  ]
+}
