@@ -1,8 +1,0 @@
-{
-  "extends": "../tsconfig-publish-cjs.json",
-  "compilerOptions": {
-    "outDir": "build",
-    "resolveJsonModule": true,
-  },
-  "include": ["."]
-}

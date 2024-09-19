@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+message Attribute {
+    string name = 1;
+    string value = 2;
+}
+
+message TagBlock {
+    string name = 1;
+    Body body = 2;
+    repeated Attribute attr_list = 4;
+}
+
+message IncludeBlock {
+    string value = 1;
+}
+
+message ErrorBlock {
+    string value = 1;
+    optional string message = 2;
+}
+
+message Block {
+    oneof block {
+        string text = 1;
+        TagBlock tag = 2;
+        IncludeBlock include = 3;
+        ErrorBlock error = 4;
+    }
+}
+
+message Body {
+    repeated Block blocks = 2;
+}
