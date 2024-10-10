@@ -15,6 +15,7 @@ export interface TagBlock {
   name: string;
   body: Body | undefined;
   attrList: Attribute[];
+  separator: string;
 }
 
 export interface IncludeBlock {

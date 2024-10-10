@@ -18,21 +18,22 @@ type int = number;
 
 export default class bookbox_parser extends Parser {
 	public static readonly ESC = 1;
-	public static readonly DOUBLE_OPEN = 2;
+	public static readonly INCLUDE_OPEN = 2;
 	public static readonly OPEN = 3;
 	public static readonly CLOSE = 4;
 	public static readonly TEXT = 5;
 	public static readonly SYSTEM_FLAG = 6;
 	public static readonly NAME = 7;
 	public static readonly DOT = 8;
-	public static readonly ATTR_OPEN = 9;
-	public static readonly SEPARATOR = 10;
-	public static readonly UNKNOWN = 11;
-	public static readonly ATTR_ESC = 12;
-	public static readonly ATTR_CLOSE = 13;
-	public static readonly ATTR_TEXT = 14;
-	public static readonly DOUBLE_CLOSE = 15;
-	public static readonly INCLUDE_TEXT = 16;
+	public static readonly COLON = 9;
+	public static readonly ATTR_OPEN = 10;
+	public static readonly SEPARATOR = 11;
+	public static readonly UNKNOWN = 12;
+	public static readonly ATTR_ESC = 13;
+	public static readonly ATTR_CLOSE = 14;
+	public static readonly ATTR_TEXT = 15;
+	public static readonly INCLUDE_CLOSE = 16;
+	public static readonly INCLUDE_TEXT = 17;
 	public static override readonly EOF = Token.EOF;
 	public static readonly RULE_file = 0;
 	public static readonly RULE_file_block = 1;
@@ -48,22 +49,23 @@ export default class bookbox_parser extends Parser {
                                                             "'{{'", null, 
                                                             null, null, 
                                                             "'#'", null, 
-                                                            "'.'", null, 
+                                                            "'.'", "':'", 
                                                             null, null, 
                                                             null, null, 
-                                                            null, "'}}'" ];
+                                                            null, null, 
+                                                            "'}}'" ];
 	public static readonly symbolicNames: (string | null)[] = [ null, "ESC", 
-                                                             "DOUBLE_OPEN", 
+                                                             "INCLUDE_OPEN", 
                                                              "OPEN", "CLOSE", 
                                                              "TEXT", "SYSTEM_FLAG", 
                                                              "NAME", "DOT", 
-                                                             "ATTR_OPEN", 
+                                                             "COLON", "ATTR_OPEN", 
                                                              "SEPARATOR", 
                                                              "UNKNOWN", 
                                                              "ATTR_ESC", 
                                                              "ATTR_CLOSE", 
                                                              "ATTR_TEXT", 
-                                                             "DOUBLE_CLOSE", 
+                                                             "INCLUDE_CLOSE", 
                                                              "INCLUDE_TEXT" ];
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
@@ -357,7 +359,6 @@ export default class bookbox_parser extends Parser {
 		this.enterRule(localctx, 12, bookbox_parser.RULE_name);
 		let _la: number;
 		try {
-			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
 			this.state = 59;
@@ -374,21 +375,19 @@ export default class bookbox_parser extends Parser {
 			this.match(bookbox_parser.NAME);
 			this.state = 66;
 			this._errHandler.sync(this);
-			_alt = this._interp.adaptivePredict(this._input, 7, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 62;
-					this.match(bookbox_parser.DOT);
-					this.state = 63;
-					this.match(bookbox_parser.NAME);
-					}
-					}
+			_la = this._input.LA(1);
+			while (_la===9) {
+				{
+				{
+				this.state = 62;
+				this.match(bookbox_parser.COLON);
+				this.state = 63;
+				this.match(bookbox_parser.NAME);
+				}
 				}
 				this.state = 68;
 				this._errHandler.sync(this);
-				_alt = this._interp.adaptivePredict(this._input, 7, this._ctx);
+				_la = this._input.LA(1);
 			}
 			}
 		}
@@ -410,6 +409,7 @@ export default class bookbox_parser extends Parser {
 	public attr(): AttrContext {
 		let localctx: AttrContext = new AttrContext(this, this._ctx, this.state);
 		this.enterRule(localctx, 14, bookbox_parser.RULE_attr);
+		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
@@ -417,12 +417,20 @@ export default class bookbox_parser extends Parser {
 			this.match(bookbox_parser.DOT);
 			this.state = 70;
 			this.match(bookbox_parser.NAME);
-			this.state = 71;
-			this.match(bookbox_parser.ATTR_OPEN);
-			this.state = 72;
-			this.attr_text();
-			this.state = 73;
-			this.match(bookbox_parser.ATTR_CLOSE);
+			this.state = 75;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la===10) {
+				{
+				this.state = 71;
+				this.match(bookbox_parser.ATTR_OPEN);
+				this.state = 72;
+				this.attr_text();
+				this.state = 73;
+				this.match(bookbox_parser.ATTR_CLOSE);
+				}
+			}
+
 			}
 		}
 		catch (re) {
@@ -447,15 +455,15 @@ export default class bookbox_parser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 78;
+			this.state = 80;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while (_la===12 || _la===14) {
+			while (_la===13 || _la===15) {
 				{
 				{
-				this.state = 75;
+				this.state = 77;
 				_la = this._input.LA(1);
-				if(!(_la===12 || _la===14)) {
+				if(!(_la===13 || _la===15)) {
 				this._errHandler.recoverInline(this);
 				}
 				else {
@@ -464,7 +472,7 @@ export default class bookbox_parser extends Parser {
 				}
 				}
 				}
-				this.state = 80;
+				this.state = 82;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -491,12 +499,12 @@ export default class bookbox_parser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 81;
-			this.match(bookbox_parser.DOUBLE_OPEN);
-			this.state = 82;
-			this.match(bookbox_parser.INCLUDE_TEXT);
 			this.state = 83;
-			this.match(bookbox_parser.DOUBLE_CLOSE);
+			this.match(bookbox_parser.INCLUDE_OPEN);
+			this.state = 84;
+			this.match(bookbox_parser.INCLUDE_TEXT);
+			this.state = 85;
+			this.match(bookbox_parser.INCLUDE_CLOSE);
 			}
 		}
 		catch (re) {
@@ -514,31 +522,32 @@ export default class bookbox_parser extends Parser {
 		return localctx;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,16,86,2,0,7,0,2,
+	public static readonly _serializedATN: number[] = [4,1,17,88,2,0,7,0,2,
 	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,1,
 	0,5,0,22,8,0,10,0,12,0,25,9,0,1,1,1,1,3,1,29,8,1,1,2,5,2,32,8,2,10,2,12,
 	2,35,9,2,1,3,1,3,1,3,3,3,40,8,3,1,4,4,4,43,8,4,11,4,12,4,44,1,5,1,5,1,5,
 	5,5,50,8,5,10,5,12,5,53,9,5,1,5,1,5,1,5,1,5,1,6,3,6,60,8,6,1,6,1,6,1,6,
-	5,6,65,8,6,10,6,12,6,68,9,6,1,7,1,7,1,7,1,7,1,7,1,7,1,8,5,8,77,8,8,10,8,
-	12,8,80,9,8,1,9,1,9,1,9,1,9,1,9,0,0,10,0,2,4,6,8,10,12,14,16,18,0,2,2,0,
-	1,1,5,5,2,0,12,12,14,14,85,0,23,1,0,0,0,2,28,1,0,0,0,4,33,1,0,0,0,6,39,
-	1,0,0,0,8,42,1,0,0,0,10,46,1,0,0,0,12,59,1,0,0,0,14,69,1,0,0,0,16,78,1,
-	0,0,0,18,81,1,0,0,0,20,22,3,2,1,0,21,20,1,0,0,0,22,25,1,0,0,0,23,21,1,0,
-	0,0,23,24,1,0,0,0,24,1,1,0,0,0,25,23,1,0,0,0,26,29,3,6,3,0,27,29,5,4,0,
-	0,28,26,1,0,0,0,28,27,1,0,0,0,29,3,1,0,0,0,30,32,3,6,3,0,31,30,1,0,0,0,
-	32,35,1,0,0,0,33,31,1,0,0,0,33,34,1,0,0,0,34,5,1,0,0,0,35,33,1,0,0,0,36,
-	40,3,18,9,0,37,40,3,10,5,0,38,40,3,8,4,0,39,36,1,0,0,0,39,37,1,0,0,0,39,
-	38,1,0,0,0,40,7,1,0,0,0,41,43,7,0,0,0,42,41,1,0,0,0,43,44,1,0,0,0,44,42,
-	1,0,0,0,44,45,1,0,0,0,45,9,1,0,0,0,46,47,5,3,0,0,47,51,3,12,6,0,48,50,3,
-	14,7,0,49,48,1,0,0,0,50,53,1,0,0,0,51,49,1,0,0,0,51,52,1,0,0,0,52,54,1,
-	0,0,0,53,51,1,0,0,0,54,55,5,10,0,0,55,56,3,4,2,0,56,57,5,4,0,0,57,11,1,
-	0,0,0,58,60,5,6,0,0,59,58,1,0,0,0,59,60,1,0,0,0,60,61,1,0,0,0,61,66,5,7,
-	0,0,62,63,5,8,0,0,63,65,5,7,0,0,64,62,1,0,0,0,65,68,1,0,0,0,66,64,1,0,0,
-	0,66,67,1,0,0,0,67,13,1,0,0,0,68,66,1,0,0,0,69,70,5,8,0,0,70,71,5,7,0,0,
-	71,72,5,9,0,0,72,73,3,16,8,0,73,74,5,13,0,0,74,15,1,0,0,0,75,77,7,1,0,0,
-	76,75,1,0,0,0,77,80,1,0,0,0,78,76,1,0,0,0,78,79,1,0,0,0,79,17,1,0,0,0,80,
-	78,1,0,0,0,81,82,5,2,0,0,82,83,5,16,0,0,83,84,5,15,0,0,84,19,1,0,0,0,9,
-	23,28,33,39,44,51,59,66,78];
+	5,6,65,8,6,10,6,12,6,68,9,6,1,7,1,7,1,7,1,7,1,7,1,7,3,7,76,8,7,1,8,5,8,
+	79,8,8,10,8,12,8,82,9,8,1,9,1,9,1,9,1,9,1,9,0,0,10,0,2,4,6,8,10,12,14,16,
+	18,0,2,2,0,1,1,5,5,2,0,13,13,15,15,88,0,23,1,0,0,0,2,28,1,0,0,0,4,33,1,
+	0,0,0,6,39,1,0,0,0,8,42,1,0,0,0,10,46,1,0,0,0,12,59,1,0,0,0,14,69,1,0,0,
+	0,16,80,1,0,0,0,18,83,1,0,0,0,20,22,3,2,1,0,21,20,1,0,0,0,22,25,1,0,0,0,
+	23,21,1,0,0,0,23,24,1,0,0,0,24,1,1,0,0,0,25,23,1,0,0,0,26,29,3,6,3,0,27,
+	29,5,4,0,0,28,26,1,0,0,0,28,27,1,0,0,0,29,3,1,0,0,0,30,32,3,6,3,0,31,30,
+	1,0,0,0,32,35,1,0,0,0,33,31,1,0,0,0,33,34,1,0,0,0,34,5,1,0,0,0,35,33,1,
+	0,0,0,36,40,3,18,9,0,37,40,3,10,5,0,38,40,3,8,4,0,39,36,1,0,0,0,39,37,1,
+	0,0,0,39,38,1,0,0,0,40,7,1,0,0,0,41,43,7,0,0,0,42,41,1,0,0,0,43,44,1,0,
+	0,0,44,42,1,0,0,0,44,45,1,0,0,0,45,9,1,0,0,0,46,47,5,3,0,0,47,51,3,12,6,
+	0,48,50,3,14,7,0,49,48,1,0,0,0,50,53,1,0,0,0,51,49,1,0,0,0,51,52,1,0,0,
+	0,52,54,1,0,0,0,53,51,1,0,0,0,54,55,5,11,0,0,55,56,3,4,2,0,56,57,5,4,0,
+	0,57,11,1,0,0,0,58,60,5,6,0,0,59,58,1,0,0,0,59,60,1,0,0,0,60,61,1,0,0,0,
+	61,66,5,7,0,0,62,63,5,9,0,0,63,65,5,7,0,0,64,62,1,0,0,0,65,68,1,0,0,0,66,
+	64,1,0,0,0,66,67,1,0,0,0,67,13,1,0,0,0,68,66,1,0,0,0,69,70,5,8,0,0,70,75,
+	5,7,0,0,71,72,5,10,0,0,72,73,3,16,8,0,73,74,5,14,0,0,74,76,1,0,0,0,75,71,
+	1,0,0,0,75,76,1,0,0,0,76,15,1,0,0,0,77,79,7,1,0,0,78,77,1,0,0,0,79,82,1,
+	0,0,0,80,78,1,0,0,0,80,81,1,0,0,0,81,17,1,0,0,0,82,80,1,0,0,0,83,84,5,2,
+	0,0,84,85,5,17,0,0,85,86,5,16,0,0,86,19,1,0,0,0,10,23,28,33,39,44,51,59,
+	66,75,80];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {
@@ -754,11 +763,11 @@ export class NameContext extends ParserRuleContext {
 	public SYSTEM_FLAG(): TerminalNode {
 		return this.getToken(bookbox_parser.SYSTEM_FLAG, 0);
 	}
-	public DOT_list(): TerminalNode[] {
-	    	return this.getTokens(bookbox_parser.DOT);
+	public COLON_list(): TerminalNode[] {
+	    	return this.getTokens(bookbox_parser.COLON);
 	}
-	public DOT(i: number): TerminalNode {
-		return this.getToken(bookbox_parser.DOT, i);
+	public COLON(i: number): TerminalNode {
+		return this.getToken(bookbox_parser.COLON, i);
 	}
     public get ruleIndex(): number {
     	return bookbox_parser.RULE_name;
@@ -850,14 +859,14 @@ export class Include_blockContext extends ParserRuleContext {
 		super(parent, invokingState);
     	this.parser = parser;
 	}
-	public DOUBLE_OPEN(): TerminalNode {
-		return this.getToken(bookbox_parser.DOUBLE_OPEN, 0);
+	public INCLUDE_OPEN(): TerminalNode {
+		return this.getToken(bookbox_parser.INCLUDE_OPEN, 0);
 	}
 	public INCLUDE_TEXT(): TerminalNode {
 		return this.getToken(bookbox_parser.INCLUDE_TEXT, 0);
 	}
-	public DOUBLE_CLOSE(): TerminalNode {
-		return this.getToken(bookbox_parser.DOUBLE_CLOSE, 0);
+	public INCLUDE_CLOSE(): TerminalNode {
+		return this.getToken(bookbox_parser.INCLUDE_CLOSE, 0);
 	}
     public get ruleIndex(): number {
     	return bookbox_parser.RULE_include_block;

@@ -13,8 +13,8 @@ text: (TEXT | ESC)+;
 
 tag_block: OPEN name (attr)* SEPARATOR body CLOSE;
 
-name: SYSTEM_FLAG? NAME (DOT NAME)*;
-attr: DOT NAME ATTR_OPEN attr_text ATTR_CLOSE;
+name: SYSTEM_FLAG? NAME (COLON NAME)*;
+attr: DOT NAME (ATTR_OPEN attr_text ATTR_CLOSE)?;
 attr_text: (ATTR_TEXT | ATTR_ESC)*;
 
-include_block: DOUBLE_OPEN INCLUDE_TEXT DOUBLE_CLOSE;
+include_block: INCLUDE_OPEN INCLUDE_TEXT INCLUDE_CLOSE;

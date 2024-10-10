@@ -1,0 +1,101 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Bookbox markup",
+  "patterns": [
+    {
+      "include": "#body"
+    }
+  ],
+  "repository": {
+    "body": {
+      "patterns": [
+        {
+          "include": "#escaping"
+        },
+        {
+          "include": "#long_include_blocks"
+        },
+        {
+          "include": "#include_blocks"
+        },
+        {
+          "include": "#tag_blocks"
+        }
+      ]
+    },
+    "escaping": {
+      "match": "\\\\.",
+      "name": "constant.character.escape.bookbox-markup"
+    },
+    "tag_blocks": {
+      "name": "meta.tag.bookbox-markup",
+      "begin": "\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.other.bookbox-markup"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "keyword.other.bookbox-markup"
+        }
+      },
+      "patterns": [
+        {
+          "begin": "(?<!\\\\\\{)(?<=\\{)#?[a-z]+(:[a-z]+)*",
+          "beginCaptures": {
+            "0": {
+              "name": "entity.name.tag.bookbox-markup"
+            }
+          },
+          "end": "[ \r\t\n]+",
+          "patterns": [
+            {
+              "begin": "(\\.)([a-z]+)(\\{)",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.operator.bookbox-markup"
+                },
+                "2": {
+                  "name": "entity.other.attribute-name.bookbox-markup"
+                },
+                "3": {
+                  "name": "keyword.other.bookbox-markup"
+                }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "keyword.other.bookbox-markup"
+                }
+              },
+              "name": "string.quoted.other.bookbox-markup",
+              "patterns": [{ "include": "#escaping" }]
+            },
+            {
+              "match": "\\.([a-z]+)",
+              "captures": {
+                "1": {
+                  "name": "entity.other.attribute-name.bookbox-markup"
+                }
+              }
+            }
+          ]
+        },
+        { "include": "#body" }
+      ]
+    },
+    "include_blocks": {
+      "name": "string.quoted.other.bookbox-markup",
+      "begin": "\\{\\{",
+      "end": "\\}\\}"
+    },
+    "long_include_blocks": {
+      "name": "string.quoted.other.bookbox-markup",
+      "begin": "\\{\\{\\{",
+      "end": "\\}\\}\\}"
+    }
+  },
+  "scopeName": "source.bookbox-markup"
+}

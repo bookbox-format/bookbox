@@ -77,13 +77,14 @@ function prepareBlock(ctx: BlockContext): Block {
       const name = tagBlock.name().getText();
       if (name === '') return error(reserveText);
 
+      const separator = tagBlock.SEPARATOR().getText();
       const body = prepareBody(tagBlock.body());
       const attrList: Attribute[] = tagBlock
         .attr_list()
         .filter(attr => !attr.exception)
         .map(attr => {
           const name = attr.NAME().getText();
-          const value = attr.attr_text().getText();
+          const value = attr.attr_text()?.getText() ?? '';
           return {
             name,
             value,
@@ -95,6 +96,7 @@ function prepareBlock(ctx: BlockContext): Block {
           name,
           body,
           attrList,
+          separator,
         },
       };
 
