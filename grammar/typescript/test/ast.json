@@ -1,7 +1,7 @@
 {
   "blocks": [
     {
-      "text": "\njust string\n\n"
+      "text": "Для примера напишем текст из "
     },
     {
       "tag": {
@@ -9,20 +9,279 @@
         "body": {
           "blocks": [
             {
-              "text": "ya"
+              "text": "документации YTsaurus"
             }
           ]
         },
         "attrList": [
           {
             "name": "href",
-            "value": "ya.ru"
+            "value": "https://ytsaurus.tech/docs/ru/user-guide/dynamic-tables/dyn-query-language#obrashenie-k-kontejneram"
           }
-        ]
+        ],
+        "separator": " "
       }
     },
     {
-      "text": "\n"
+      "text": " по состоянию на 17.09.2024.\n\n"
+    },
+    {
+      "tag": {
+        "name": "header",
+        "body": {
+          "blocks": [
+            {
+              "text": "Обращение к контейнерам"
+            }
+          ]
+        },
+        "attrList": [
+          {
+            "name": "level",
+            "value": "4"
+          }
+        ],
+        "separator": " "
+      }
+    },
+    {
+      "text": "\n\nЕсли столбец таблицы имеет составной тип данных "
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "Composite"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ", для обращения к полям этого столбца можно использовать следующий синтаксис:\n- для доступа к полям структур ("
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "struct"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ") используется точка;\n- для доступа к полям кортежей ("
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "tuple"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ") используется точка, адресация начинается "
+    },
+    {
+      "tag": {
+        "name": "strong",
+        "body": {
+          "blocks": [
+            {
+              "text": "с нуля"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ";\n- для доступа к полям словарей ("
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "dict"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ") используются квадратные скобки;\n- для доступа к полям списков ("
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "list"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ") используются квадратные скобки, адресация начинается "
+    },
+    {
+      "tag": {
+        "name": "strong",
+        "body": {
+          "blocks": [
+            {
+              "text": "с нуля"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ".\n\nКорректность обращения к полям структур и кортежей выполняется "
+    },
+    {
+      "tag": {
+        "name": "strong",
+        "body": {
+          "blocks": [
+            {
+              "text": "до начала"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": " выполнения запроса. Корректность обращения к полям словарей и списков выполняется "
+    },
+    {
+      "tag": {
+        "name": "strong",
+        "body": {
+          "blocks": [
+            {
+              "text": "во время"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": " выполнения запроса.\n\nЧтобы воспользоваться этим синтаксисом, необходимо в параметрах запроса указать "
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "syntax_version=2"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ". Начиная с этой версии синтаксиса, для экранирования строк используется символ "
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "backtick"
+            }
+          ]
+        },
+        "attrList": [],
+        "separator": " "
+      }
+    },
+    {
+      "text": ".\n\nПри обращении к контейнерам необходимо указывать полное имя столбца, включая алиас таблицы.\n\nПримеры работы:\n"
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "t.struct.member,\nt.tuple.0,\nt.dict[\"key\"],\nt.list[1+1]\nfrom `//tmp/test` as t;\n"
+            }
+          ]
+        },
+        "attrList": [
+          {
+            "name": "block",
+            "value": ""
+          },
+          {
+            "name": "lang",
+            "value": "sql"
+          }
+        ],
+        "separator": "\n"
+      }
+    },
+    {
+      "text": "\n\n"
+    },
+    {
+      "tag": {
+        "name": "code",
+        "body": {
+          "blocks": [
+            {
+              "text": "$ yt create table '//tmp/test' --attributes '\\{dynamic=true; schema=<\"unique_keys\"=%true;\"strict\"=%true;>[\\{name=a;sort_order=ascending;type=int64;\\};\\{name=b;type_v3=\\{type_name=struct;members=[\\{name=c;type=\\{type_name=list;item=int64\\}\\}]\\}\\}]\\}'\n$ yt mount-table --path '//tmp/test'\n$ echo '\\{a=0;b=\\{c=[]\\}\\}' | yt insert-rows --table '//tmp/test' --format yson\n$ echo '\\{a=1;b=\\{c=[1;2;3]\\}\\}' | yt insert-rows --table '//tmp/test' --format yson\n$ echo '\\{a=2;b=\\{c=[4]\\}\\}' | yt insert-rows --table '//tmp/test' --format yson\n\n$ yt select-rows 't.b.c from `//tmp/test` as t' --syntax-version 2 --format json\n\\{\"t.b.c\":[]\\}\n\\{\"t.b.c\":[1,2,3]\\}\n\\{\"t.b.c\":[4]\\}\n\n$ yt select-rows 't.b.c[0] from `//tmp/test` as t' --syntax-version 2 --format json\n\\{\"t.b.c[0]\":null\\}\n\\{\"t.b.c[0]\":1\\}\n\\{\"t.b.c[0]\":4\\}\n"
+            }
+          ]
+        },
+        "attrList": [
+          {
+            "name": "block",
+            "value": ""
+          },
+          {
+            "name": "lang",
+            "value": "bash"
+          }
+        ],
+        "separator": "\n"
+      }
     }
   ]
 }

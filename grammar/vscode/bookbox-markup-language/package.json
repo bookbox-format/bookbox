@@ -1,0 +1,45 @@
+{
+  "name": "bookbox-markup-language",
+  "displayName": "Bookbox markup language",
+  "description": "Syntax highlighting for bookbox markup language",
+  "version": "0.0.1",
+  "publisher": "bookbox-format",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bookbox-format/bookbox.git"
+  },
+  "icon": "images/logo-128.png",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "license": "MIT",
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "bookbox-markup",
+        "aliases": [
+          "Bookbox markup",
+          "bookbox-markup"
+        ],
+        "extensions": [
+          ".bbm"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "dark": "images/logo.svg",
+          "light": "images/logo.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "bookbox-markup",
+        "scopeName": "source.bookbox-markup",
+        "path": "./syntaxes/bookbox-markup.tmLanguage.json"
+      }
+    ]
+  }
+}

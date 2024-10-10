@@ -1,20 +1,20 @@
-Для примера напишем текст из {a.href{https://ytsaurus.tech/docs/ru/user-guide/dynamic-tables/dyn-query-language#obrashenie-k-kontejneram} документации YTsaurus} по состоянию на 17.09.2024.
+For example, let's write the text from {a.href{https://ytsaurus.tech/docs/en/user-guide/dynamic-tables/dyn-query-language#accessing-containers} the documentation YTsaurus} as of 10.07.2024.
 
-{header.level{4} Обращение к контейнерам}
+{header.level{4} Accessing containers}
 
-Если столбец таблицы имеет составной тип данных {code Composite}, для обращения к полям этого столбца можно использовать следующий синтаксис:
-- для доступа к полям структур ({code struct}) используется точка;
-- для доступа к полям кортежей ({code tuple}) используется точка, адресация начинается {strong с нуля};
-- для доступа к полям словарей ({code dict}) используются квадратные скобки;
-- для доступа к полям списков ({code list}) используются квадратные скобки, адресация начинается {strong с нуля}.
+If a table column has the {code Composite} data type, you can use the following syntax to access that column's fields:
+- To access {code struct} fields, use a dot.
+- To access {code tuple} fields, use a dot. Indexing is {b zero-based}.
+- To access {code dict} fields, use square brackets.
+- To access {code list} fields, use square brackets. Indexing is {b zero-based}.
 
-Корректность обращения к полям структур и кортежей выполняется {strong до начала} выполнения запроса. Корректность обращения к полям словарей и списков выполняется {strong во время} выполнения запроса.
+The correctness of accessing struct and tuple fields is checked {b before starting} the query's execution. The correctness of accessing map and list fields is checked {b during} the query's execution.
 
-Чтобы воспользоваться этим синтаксисом, необходимо в параметрах запроса указать {code syntax_version=2}. Начиная с этой версии синтаксиса, для экранирования строк используется символ {code backtick}.
+To enable this syntax, make sure to set {code syntax_version=2} in the query parameters. Starting with this version of the syntax, strings are escaped with {code backticks}.
 
-При обращении к контейнерам необходимо указывать полное имя столбца, включая алиас таблицы.
+To access containers, you need to specify the full column name, including the table alias.
 
-Примеры работы:
+Usage examples:
 {code.block.lang{sql}
 t.struct.member,
 t.tuple.0,
@@ -40,3 +40,11 @@ $ yt select-rows 't.b.c[0] from `//tmp/test` as t' --syntax-version 2 --format j
 \{"t.b.c[0]":1\}
 \{"t.b.c[0]":4\}
 }
+
+
+
+
+
+
+
+
