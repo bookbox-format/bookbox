@@ -1,7 +1,7 @@
 {
   "blocks": [
     {
-      "text": "Для примера напишем текст из "
+      "text": "For example, let's write the text from "
     },
     {
       "tag": {
@@ -9,21 +9,22 @@
         "body": {
           "blocks": [
             {
-              "text": "документации YTsaurus"
+              "text": "the documentation YTsaurus"
             }
           ]
         },
         "attrList": [
           {
             "name": "href",
-            "value": "https://ytsaurus.tech/docs/ru/user-guide/dynamic-tables/dyn-query-language#obrashenie-k-kontejneram"
+            "value": "https://ytsaurus.tech/docs/en/user-guide/dynamic-tables/dyn-query-language#accessing-containers",
+            "empty": false
           }
         ],
         "separator": " "
       }
     },
     {
-      "text": " по состоянию на 17.09.2024.\n\n"
+      "text": " as of 10.07.2024.\n\n"
     },
     {
       "tag": {
@@ -31,21 +32,22 @@
         "body": {
           "blocks": [
             {
-              "text": "Обращение к контейнерам"
+              "text": "Accessing containers"
             }
           ]
         },
         "attrList": [
           {
             "name": "level",
-            "value": "4"
+            "value": "4",
+            "empty": false
           }
         ],
         "separator": " "
       }
     },
     {
-      "text": "\n\nЕсли столбец таблицы имеет составной тип данных "
+      "text": "\n\nIf a table column has the "
     },
     {
       "tag": {
@@ -62,7 +64,7 @@
       }
     },
     {
-      "text": ", для обращения к полям этого столбца можно использовать следующий синтаксис:\n- для доступа к полям структур ("
+      "text": " data type, you can use the following syntax to access that column's fields:\n- To access "
     },
     {
       "tag": {
@@ -79,7 +81,7 @@
       }
     },
     {
-      "text": ") используется точка;\n- для доступа к полям кортежей ("
+      "text": " fields, use a dot.\n- To access "
     },
     {
       "tag": {
@@ -96,15 +98,15 @@
       }
     },
     {
-      "text": ") используется точка, адресация начинается "
+      "text": " fields, use a dot. Indexing is "
     },
     {
       "tag": {
-        "name": "strong",
+        "name": "b",
         "body": {
           "blocks": [
             {
-              "text": "с нуля"
+              "text": "zero-based"
             }
           ]
         },
@@ -113,7 +115,7 @@
       }
     },
     {
-      "text": ";\n- для доступа к полям словарей ("
+      "text": ".\n- To access "
     },
     {
       "tag": {
@@ -130,7 +132,7 @@
       }
     },
     {
-      "text": ") используются квадратные скобки;\n- для доступа к полям списков ("
+      "text": " fields, use square brackets.\n- To access "
     },
     {
       "tag": {
@@ -147,15 +149,15 @@
       }
     },
     {
-      "text": ") используются квадратные скобки, адресация начинается "
+      "text": " fields, use square brackets. Indexing is "
     },
     {
       "tag": {
-        "name": "strong",
+        "name": "b",
         "body": {
           "blocks": [
             {
-              "text": "с нуля"
+              "text": "zero-based"
             }
           ]
         },
@@ -164,15 +166,15 @@
       }
     },
     {
-      "text": ".\n\nКорректность обращения к полям структур и кортежей выполняется "
+      "text": ".\n\nThe correctness of accessing struct and tuple fields is checked "
     },
     {
       "tag": {
-        "name": "strong",
+        "name": "b",
         "body": {
           "blocks": [
             {
-              "text": "до начала"
+              "text": "before starting"
             }
           ]
         },
@@ -181,15 +183,15 @@
       }
     },
     {
-      "text": " выполнения запроса. Корректность обращения к полям словарей и списков выполняется "
+      "text": " the query's execution. The correctness of accessing map and list fields is checked "
     },
     {
       "tag": {
-        "name": "strong",
+        "name": "b",
         "body": {
           "blocks": [
             {
-              "text": "во время"
+              "text": "during"
             }
           ]
         },
@@ -198,7 +200,7 @@
       }
     },
     {
-      "text": " выполнения запроса.\n\nЧтобы воспользоваться этим синтаксисом, необходимо в параметрах запроса указать "
+      "text": " the query's execution.\n\nTo enable this syntax, make sure to set "
     },
     {
       "tag": {
@@ -215,7 +217,7 @@
       }
     },
     {
-      "text": ". Начиная с этой версии синтаксиса, для экранирования строк используется символ "
+      "text": " in the query parameters. Starting with this version of the syntax, strings are escaped with "
     },
     {
       "tag": {
@@ -223,7 +225,7 @@
         "body": {
           "blocks": [
             {
-              "text": "backtick"
+              "text": "backticks"
             }
           ]
         },
@@ -232,7 +234,20 @@
       }
     },
     {
-      "text": ".\n\nПри обращении к контейнерам необходимо указывать полное имя столбца, включая алиас таблицы.\n\nПримеры работы:\n"
+      "text": ".\n\nTo access containers, you need to specify the full column name, including the table alias.\n\n"
+    },
+    {
+      "tag": {
+        "name": "separator",
+        "body": {
+          "blocks": []
+        },
+        "attrList": [],
+        "separator": ""
+      }
+    },
+    {
+      "text": "\n\nUsage examples:\n"
     },
     {
       "tag": {
@@ -247,11 +262,13 @@
         "attrList": [
           {
             "name": "block",
-            "value": ""
+            "value": "",
+            "empty": true
           },
           {
             "name": "lang",
-            "value": "sql"
+            "value": "sql",
+            "empty": false
           }
         ],
         "separator": "\n"
@@ -273,15 +290,20 @@
         "attrList": [
           {
             "name": "block",
-            "value": ""
+            "value": "",
+            "empty": true
           },
           {
             "name": "lang",
-            "value": "bash"
+            "value": "bash",
+            "empty": false
           }
         ],
         "separator": "\n"
       }
+    },
+    {
+      "text": "\n"
     }
   ]
 }

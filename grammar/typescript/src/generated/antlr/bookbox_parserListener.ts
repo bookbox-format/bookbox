@@ -9,6 +9,7 @@ import { BodyContext } from "./bookbox_parser.js";
 import { BlockContext } from "./bookbox_parser.js";
 import { TextContext } from "./bookbox_parser.js";
 import { Tag_blockContext } from "./bookbox_parser.js";
+import { Tag_bodyContext } from "./bookbox_parser.js";
 import { NameContext } from "./bookbox_parser.js";
 import { AttrContext } from "./bookbox_parser.js";
 import { Attr_textContext } from "./bookbox_parser.js";
@@ -80,6 +81,16 @@ export default class bookbox_parserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTag_block?: (ctx: Tag_blockContext) => void;
+	/**
+	 * Enter a parse tree produced by `bookbox_parser.tag_body`.
+	 * @param ctx the parse tree
+	 */
+	enterTag_body?: (ctx: Tag_bodyContext) => void;
+	/**
+	 * Exit a parse tree produced by `bookbox_parser.tag_body`.
+	 * @param ctx the parse tree
+	 */
+	exitTag_body?: (ctx: Tag_bodyContext) => void;
 	/**
 	 * Enter a parse tree produced by `bookbox_parser.name`.
 	 * @param ctx the parse tree

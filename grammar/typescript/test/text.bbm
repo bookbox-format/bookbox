@@ -14,6 +14,8 @@ To enable this syntax, make sure to set {code syntax_version=2} in the query par
 
 To access containers, you need to specify the full column name, including the table alias.
 
+{separator}
+
 Usage examples:
 {code.block.lang{sql}
 t.struct.member,
@@ -40,11 +42,3 @@ $ yt select-rows 't.b.c[0] from `//tmp/test` as t' --syntax-version 2 --format j
 \{"t.b.c[0]":1\}
 \{"t.b.c[0]":4\}
 }
-
-
-
-
-
-
-
-

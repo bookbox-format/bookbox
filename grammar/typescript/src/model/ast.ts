@@ -42,9 +42,7 @@ function getStandartTagBlock(context: Tag_blockContext) {
     prepareToken(context.OPEN()) +
     preparePart(context.name()) +
     context.attr_list().map(preparePart).join('') +
-    prepareToken(context.SEPARATOR()) +
-    preparePart(context.body()) +
-    prepareToken(context.CLOSE())
+    (context.tag_body() ? preparePart(context.tag_body()) : '}')
   );
 }
 
@@ -76,18 +74,19 @@ function prepareBlock(ctx: BlockContext): Block {
     try {
       const name = tagBlock.name().getText();
       if (name === '') return error(reserveText);
-
-      const separator = tagBlock.SEPARATOR().getText();
-      const body = prepareBody(tagBlock.body());
+      const tagBody = tagBlock.tag_body();
+      const separator = tagBody?.SEPARATOR()?.getText() ?? '';
+      const body = prepareBody(tagBody?.body() ?? null);
       const attrList: Attribute[] = tagBlock
         .attr_list()
         .filter(attr => !attr.exception)
         .map(attr => {
           const name = attr.NAME().getText();
-          const value = attr.attr_text()?.getText() ?? '';
+          const value = attr.attr_text()?.getText();
           return {
             name,
-            value,
+            value: value ?? '',
+            empty: !value,
           };
         });
 
@@ -109,10 +108,10 @@ function prepareBlock(ctx: BlockContext): Block {
   return error(ctx.getText());
 }
 
-function prepareBody(ctx: BodyContext): Body {
+function prepareBody(ctx: BodyContext | null): Body {
   const blocks: Block[] = [];
 
-  for (const block of ctx.block_list()) {
+  for (const block of ctx?.block_list() ?? []) {
     blocks.push(prepareBlock(block));
   }
 

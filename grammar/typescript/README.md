@@ -12,7 +12,7 @@ import { parse, stringify } from '@bookbox/markup';
 const text = `
 just string
 
-{a.href(ya.ru) ya}
+{a.href{ya.ru} ya}
 `;
 
 const ast = parse(text); // type Body
@@ -35,9 +35,11 @@ const ast = parse(text); // type Body
         "attrList": [
           {
             "name": "href",
-            "value": "ya.ru"
+            "value": "ya.ru",
+            "empty": false
           }
-        ]
+        ],
+        "separator": " "
       }
     },
     {

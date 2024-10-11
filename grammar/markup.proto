@@ -3,6 +3,7 @@ syntax = "proto3";
 message Attribute {
     string name = 1;
     string value = 2;
+    bool empty = 3;
 }
 
 message TagBlock {
