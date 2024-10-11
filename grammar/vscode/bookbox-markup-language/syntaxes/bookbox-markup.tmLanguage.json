@@ -13,10 +13,10 @@
           "include": "#escaping"
         },
         {
-          "include": "#long_include_blocks"
+          "include": "#include_blocks"
         },
         {
-          "include": "#include_blocks"
+          "include": "#short_tag_blocks"
         },
         {
           "include": "#tag_blocks"
@@ -26,6 +26,25 @@
     "escaping": {
       "match": "\\\\.",
       "name": "constant.character.escape.bookbox-markup"
+    },
+    "short_tag_blocks": {
+      "name": "meta.tag.bookbox-markup",
+      "begin": "(?<!\\\\)(\\{)(#?[a-z]+(:[a-z]+)*)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.bookbox-markup"
+        },
+        "2": {
+          "name": "entity.name.tag.bookbox-markup"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "keyword.other.bookbox-markup"
+        }
+      },
+      "patterns": [{ "include": "#attr_with_value" }, { "include": "#attr_without_value" }]
     },
     "tag_blocks": {
       "name": "meta.tag.bookbox-markup",
@@ -49,39 +68,8 @@
               "name": "entity.name.tag.bookbox-markup"
             }
           },
-          "end": "[ \r\t\n]+",
-          "patterns": [
-            {
-              "begin": "(\\.)([a-z]+)(\\{)",
-              "beginCaptures": {
-                "1": {
-                  "name": "keyword.operator.bookbox-markup"
-                },
-                "2": {
-                  "name": "entity.other.attribute-name.bookbox-markup"
-                },
-                "3": {
-                  "name": "keyword.other.bookbox-markup"
-                }
-              },
-              "end": "\\}",
-              "endCaptures": {
-                "0": {
-                  "name": "keyword.other.bookbox-markup"
-                }
-              },
-              "name": "string.quoted.other.bookbox-markup",
-              "patterns": [{ "include": "#escaping" }]
-            },
-            {
-              "match": "\\.([a-z]+)",
-              "captures": {
-                "1": {
-                  "name": "entity.other.attribute-name.bookbox-markup"
-                }
-              }
-            }
-          ]
+          "end": "[ \r\t\n]",
+          "patterns": [{ "include": "#attr_with_value" }, { "include": "#attr_without_value" }]
         },
         { "include": "#body" }
       ]
@@ -91,10 +79,35 @@
       "begin": "\\{\\{",
       "end": "\\}\\}"
     },
-    "long_include_blocks": {
+    "attr_with_value": {
+      "begin": "(\\.)([a-z]+)(\\{)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.operator.bookbox-markup"
+        },
+        "2": {
+          "name": "entity.other.attribute-name.bookbox-markup"
+        },
+        "3": {
+          "name": "keyword.other.bookbox-markup"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "keyword.other.bookbox-markup"
+        }
+      },
       "name": "string.quoted.other.bookbox-markup",
-      "begin": "\\{\\{\\{",
-      "end": "\\}\\}\\}"
+      "patterns": [{ "include": "#escaping" }]
+    },
+    "attr_without_value": {
+      "match": "\\.([a-z]+)",
+      "captures": {
+        "1": {
+          "name": "entity.other.attribute-name.bookbox-markup"
+        }
+      }
     }
   },
   "scopeName": "source.bookbox-markup"

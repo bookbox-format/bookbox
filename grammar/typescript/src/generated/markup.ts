@@ -9,6 +9,7 @@
 export interface Attribute {
   name: string;
   value: string;
+  empty: boolean;
 }
 
 export interface TagBlock {

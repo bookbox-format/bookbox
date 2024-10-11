@@ -15,6 +15,7 @@ DOT: '.';
 COLON: ':';
 ATTR_OPEN: '{' -> pushMode(ATTR);
 SEPARATOR: [ \r\t\n] -> popMode;
+SELF_CLOSE: '}' -> popMode;
 
 // without parsing errors
 UNKNOWN: . -> popMode;

@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/markup",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Markup language for bookbox format",
   "type": "module",
   "main": "dist/index.cjs",
@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
+    "diff": "^7.0.0",
     "terser": "^5.33.0",
     "ts-proto": "^2.2.0",
     "typescript": "^5.6.2",

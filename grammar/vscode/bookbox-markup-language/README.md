@@ -6,6 +6,6 @@ Syntax highlighting for bookbox markup language
 
 Create file with extension `.bbm`
 
-![example](images/example.png)
+![example](grammar/vscode/bookbox-markup-language/images/example.png)
 
 Use https://www.npmjs.com/package/@bookbox/markup
