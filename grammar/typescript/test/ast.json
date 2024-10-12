@@ -247,6 +247,14 @@
       }
     },
     {
+      "text": "\n"
+    },
+    {
+      "include": {
+        "value": "text"
+      }
+    },
+    {
       "text": "\n\nUsage examples:\n"
     },
     {

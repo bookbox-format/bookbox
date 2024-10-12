@@ -15,6 +15,7 @@ To enable this syntax, make sure to set {code syntax_version=2} in the query par
 To access containers, you need to specify the full column name, including the table alias.
 
 {separator}
+{{text}}
 
 Usage examples:
 {code.block.lang{sql}
