@@ -62,10 +62,13 @@ function prepareBlock(ctx: BlockContext): Block {
   if (text) {
     return { text: text.getText() };
   } else if (includeBlock) {
-    const value = includeBlock.INCLUDE_TEXT();
+    const value = includeBlock
+      .INCLUDE_TEXT_list()
+      .map(node => node.getText())
+      .join('');
     return {
       include: {
-        value: value.getText(),
+        value: value,
       },
     };
   } else if (tagBlock) {
