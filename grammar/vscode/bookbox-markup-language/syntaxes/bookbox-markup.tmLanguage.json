@@ -29,22 +29,21 @@
     },
     "short_tag_blocks": {
       "name": "meta.tag.bookbox-markup",
-      "begin": "(?<!\\\\)(\\{)(#?[a-z]+(:[a-z]+)*)",
-      "beginCaptures": {
+      "match": "(?<!\\\\)(\\{)(#?[a-z]+(:[a-z]+)*)((\\.[a-z]+(\\{.*(?<!\\\\)\\})?)*)(\\})",
+      "captures": {
         "1": {
           "name": "keyword.other.bookbox-markup"
         },
         "2": {
           "name": "entity.name.tag.bookbox-markup"
-        }
-      },
-      "end": "\\}",
-      "endCaptures": {
-        "0": {
+        },
+        "4": {
+          "patterns": [{ "include": "#attr_with_value" }, { "include": "#attr_without_value" }]
+        },
+        "7": {
           "name": "keyword.other.bookbox-markup"
         }
-      },
-      "patterns": [{ "include": "#attr_with_value" }, { "include": "#attr_without_value" }]
+      }
     },
     "tag_blocks": {
       "name": "meta.tag.bookbox-markup",

@@ -2,7 +2,7 @@
   "name": "bookbox-markup-language",
   "displayName": "Bookbox markup language",
   "description": "Syntax highlighting for bookbox markup language",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "bookbox-format",
   "repository": {
     "type": "git",
