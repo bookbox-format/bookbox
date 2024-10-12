@@ -11,3 +11,11 @@ In dui urna, scelerisque sed ex at, {b:s.d.a{djdddd \n kfkf} laoreet} faucibus e
 {{
 Donec vehicula sodales leo. Proin nec euismod quam, ac pharetra augue. Donec vitae libero porttitor, ullamcorper leo quis, pellentesque quam. Aliquam elementum justo convallis, mattis enim ut, rutrum ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempor rhoncus auctor. In congue metus ut felis porta dignissim. In eget magna eu risus dapibus dignissim at interdum massa. Fusce dapibus velit non tellus rhoncus congue. Etiam posuere, est sed sodales congue, dolor magna ultricies erat, eu rutrum leo enim non massa. Vestibulum eget est a lorem pulvinar dictum sed eget ligula. Donec eget ex sit amet dui pellentesque commodo vitae vel felis. Aliquam tempus, metus imperdiet porttitor fringilla, enim erat elementum arcu, quis dignissim magna tellus non enim.
 }}
+
+{table
+{{A}} {col} {{\lnot A}}
+{row}
+{b Л} {col.span} {b И}
+{row}
+{b И} {col.span{2\}}} {b Л}
+}
