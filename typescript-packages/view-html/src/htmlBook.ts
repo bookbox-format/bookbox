@@ -1,19 +1,20 @@
 import {
   BookBuilderParams,
   BookData,
+  BookItem,
   createBook,
   CreateBookParams,
   getPartialApply,
   parseNewLines,
-} from "@bookbox/core";
+} from '@bookbox/core';
 
-import { getPanel } from "./htmlBookSettings";
-import { getCssSizeStyle, getLayoutParams, parseSize } from "./layout";
-import { HtmlToken, listToHtml } from "./model";
-import { renderFormula } from "./math";
-import { renderColorCode } from "./code";
+import { getPanel } from './htmlBookSettings';
+import { getCssSizeStyle, getLayoutParams, parseSize } from './layout';
+import { HtmlToken, listToHtml } from './model';
+import { renderFormula } from './math';
+import { renderColorCode } from './code';
 
-const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
+const htmlElements: BookBuilderParams<HtmlToken>['elements'] = {
   title:
     ({ key }) =>
     ({ children }) => {
@@ -47,15 +48,11 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
   strong:
     ({ key }) =>
     ({ children }) =>
-      `<strong data-key="${key}" data-name="strong" data-layout="top">${listToHtml(
-        children
-      )}</strong>`,
+      `<strong data-key="${key}" data-name="strong" data-layout="top">${listToHtml(children)}</strong>`,
   em:
     ({ key }) =>
     ({ children }) =>
-      `<em data-key="${key}" data-name="em" data-layout="top">${listToHtml(
-        children
-      )}</em>`,
+      `<em data-key="${key}" data-name="em" data-layout="top">${listToHtml(children)}</em>`,
   format: {
     b:
       ({ key }) =>
@@ -69,48 +66,46 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
         const childrenHtml = listToHtml(children);
         return `<i data-key="${key}" data-name="format.i" data-layout="top">${childrenHtml}</i>`;
       },
+    u:
+      ({ key }) =>
+      ({ children }) => {
+        const childrenHtml = listToHtml(children);
+        return `<u data-key="${key}" data-name="format.u" data-layout="top">${childrenHtml}</u>`;
+      },
+    s:
+      ({ key }) =>
+      ({ children }) => {
+        const childrenHtml = listToHtml(children);
+        return `<s data-key="${key}" data-name="format.s" data-layout="top">${childrenHtml}</s>`;
+      },
     sub:
       ({ key }) =>
       ({ children }) =>
-        `<sub data-key="${key}" data-name="format.sub" data-layout="top">${listToHtml(
-          children
-        )}</sub>`,
+        `<sub data-key="${key}" data-name="format.sub" data-layout="top">${listToHtml(children)}</sub>`,
     sup:
       ({ key }) =>
       ({ children }) =>
-        `<sup data-key="${key}" data-name="format.sup" data-layout="top">${listToHtml(
-          children
-        )}</sup>`,
+        `<sup data-key="${key}" data-name="format.sup" data-layout="top">${listToHtml(children)}</sup>`,
     pre:
       ({ key }) =>
       ({ children }) =>
         `<span><pre data-key="${key}" data-name="format.pre" style="display: inline-block;margin: 0; padding: 0 4px; line-height: 1em; overflow: unset;">${listToHtml(
-          children
+          children,
         )}</pre></span>`,
     small:
       ({ inline, key }) =>
       ({ children }) => {
         const childrenHtml = listToHtml(children);
-        const elem = inline ? "span" : "div";
+        const elem = inline ? 'span' : 'div';
 
         return `<${elem} data-key="${key}" class="book-box-format-small" data-name="format.small" data-layout="top">${childrenHtml}</${elem}>`;
       },
   },
   web: {
     video:
-      (props) =>
+      props =>
       ({ children }) => {
-        const {
-          type,
-          src = "",
-          alt,
-          width,
-          height = "50%",
-          inline,
-          block,
-          position,
-          key,
-        } = props;
+        const { type, src = '', alt, width, height = '50%', inline, block, position, key } = props;
         const loadableId = `${key}-loadable`;
 
         const video = getIframe({
@@ -119,7 +114,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
           height,
           src,
           alt,
-          type: "video",
+          type: 'video',
         });
         const content = getFigure(video, listToHtml(children));
         const { view, position: layoutPosition } = getLayoutParams({
@@ -137,16 +132,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
                 </div>`;
       },
     audio:
-      ({
-        src = "",
-        alt,
-        key = "",
-        inline,
-        block,
-        position,
-        width,
-        height = "50%",
-      }) =>
+      ({ src = '', alt, key = '', inline, block, position, width, height = '50%' }) =>
       ({ children }) => {
         const audio = getIframe({
           id: key,
@@ -154,7 +140,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
           height,
           src,
           alt,
-          type: "audio",
+          type: 'audio',
         });
         const content = getFigure(audio, listToHtml(children));
         const { view, position: layoutPosition } = getLayoutParams({
@@ -167,17 +153,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
                 </div>`;
       },
     message:
-      ({
-        src = "",
-        type,
-        inline,
-        block,
-        position,
-        width,
-        height = "50%",
-        alt,
-        key = "",
-      }) =>
+      ({ src = '', type, inline, block, position, width, height = '50%', alt, key = '' }) =>
       ({ children }) => {
         const message = getIframe({
           id: key,
@@ -185,7 +161,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
           height,
           src,
           alt,
-          type: "message",
+          type: 'message',
         });
         const content = getFigure(message, listToHtml(children));
         const { view, position: layoutPosition } = getLayoutParams({
@@ -206,16 +182,18 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
         block,
         position,
       });
-      const langAttribute = lang ? `data-code-language="${lang}"` : "";
-      const langMark = lang ? `<div class="book-box-code-lang-mark">${lang}</div>` : "";
+      const langAttribute = lang ? `data-code-language="${lang}"` : '';
+      const langMark = lang ? `<div class="book-box-code-lang-mark">${lang}</div>` : '';
       const rawChildren = store.elementsByKeys[key ?? ''].children;
-      const colorCodeHtml = renderColorCode({ text: rawChildren.join(""), lang });
+      const colorCodeHtml = renderColorCode({ text: rawChildren.join(''), lang });
       const codeHtml = `<div style="width: 100%">${langMark}<pre><code ${langAttribute}>${colorCodeHtml}</code></pre></div>`;
       const content = position === 'full' ? codeHtml : getFigure(codeHtml, '');
-      return `<div class="book-box-code ${lang ? 'book-box-code-with-lang' : ''} book-box_media-${view} book-box_media-${layoutPosition}" data-key="${key}" data-name="code" data-layout="top">${content}</div>`;
+      return `<div class="book-box-code ${
+        lang ? 'book-box-code-with-lang' : ''
+      } book-box_media-${view} book-box_media-${layoutPosition}" data-key="${key}" data-name="code" data-layout="top">${content}</div>`;
     },
   label:
-    ({ key, ref = "" }) =>
+    ({ key, ref = '' }) =>
     ({ children, store }) => {
       const childrenHtml = listToHtml(children);
       const labelId = `label-${key}`;
@@ -224,15 +202,15 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
         prefix: labelId,
         tumbler: {
           content: childrenHtml,
-          classes: ["book-box-label-mark"],
-          inputClasses: ["book-box-label-input"],
+          classes: ['book-box-label-mark'],
+          inputClasses: ['book-box-label-input'],
         },
         panel: {
           content: `<div class="book-box-label-panel-content">
           ${listToHtml(data)}
             <div class="book-box-label-panel-goto" onclick="gotoKey('${ref}')">→</div>
             </div>`,
-          classes: ["book-box-label-data"],
+          classes: ['book-box-label-data'],
           name: `<div class="book-box-label-panel-header">label: <div class="book-box-label-panel-mark">${childrenHtml}</div>
           <div class="book-box-label-panel-goto" onclick="gotoKey('${key}')">→</div></div>`,
         },
@@ -249,14 +227,12 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
         prefix: labelId,
         tumbler: {
           content: childrenHtml,
-          classes: ["book-box-label-mark"],
-          inputClasses: ["book-box-label-input"],
+          classes: ['book-box-label-mark'],
+          inputClasses: ['book-box-label-input'],
         },
         panel: {
-          content: `<div class="book-box-label-panel-content">${listToHtml(
-            data
-          )}</div>`,
-          classes: ["book-box-label-data"],
+          content: `<div class="book-box-label-panel-content">${listToHtml(data)}</div>`,
+          classes: ['book-box-label-data'],
           name: `tooltip: <div class="book-box-label-panel-mark">${childrenHtml}</div>`,
         },
       });
@@ -269,25 +245,16 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
   link:
     ({ ref, href, key }) =>
     ({ children }) => {
-      const content = children.length > 0 ? children : [href ?? ref ?? ""];
+      const content = children.length > 0 ? children : [href ?? ref ?? ''];
       const childrenHtml = listToHtml(content);
       return href
         ? `<a class="book-box-link book-box_clickable" href="${href}" data-key="${key}" data-name="link">${childrenHtml}</a>`
         : `<span class="book-box-link book-box_clickable" data-key="${key}" data-name="link" onclick="gotoKey('${ref}')" data-layout="top">${childrenHtml}</span>`;
     },
   image:
-    ({
-      src = "/~~non-exist.png",
-      alt,
-      position = "center",
-      height = 1,
-      width = 1,
-      block,
-      inline,
-      key,
-    }) =>
+    ({ src = '/~~non-exist.png', alt, position = 'center', height = 1, width = 1, block, inline, key }) =>
     ({ children }) => {
-      const isSvg = src.endsWith(".svg");
+      const isSvg = src.endsWith('.svg');
 
       const heightSize = parseSize(height ?? 1);
       const widthSize = parseSize(width ?? 1);
@@ -303,9 +270,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
         position,
       });
 
-      const svgSource = isSvg
-        ? `<source type="image/svg+xml" srcSet="${src}" />`
-        : "";
+      const svgSource = isSvg ? `<source type="image/svg+xml" srcSet="${src}" />` : '';
       const image = `<picture style="${sizeBlockStyle}; width: 100%">
                 ${svgSource}
                 <img style="${sizeBlockStyle}" src="${src}" alt="${alt}" loading="lazy"/>
@@ -322,16 +287,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
             </div>`;
     },
   video:
-    ({
-      src,
-      alt = "",
-      position = "center",
-      height = 1,
-      width = 1,
-      block,
-      inline,
-      key,
-    }) =>
+    ({ src, alt = '', position = 'center', height = 1, width = 1, block, inline, key }) =>
     ({ children }) => {
       const heightSize = parseSize(height);
       const widthSize = parseSize(width);
@@ -359,7 +315,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
             </div>`;
     },
   audio:
-    ({ src, alt = "", key, inline, block, position = "center" }) =>
+    ({ src, alt = '', key, inline, block, position = 'center' }) =>
     ({ children }) => {
       const { view, position: layoutPosition } = getLayoutParams({
         inline,
@@ -379,7 +335,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
             </div>`;
     },
   math:
-    ({ key = "", position = "inline", inline, block }) =>
+    ({ key = '', position = 'inline', inline, block }) =>
     ({ children, store }) => {
       const { view, position: layoutPosition } = getLayoutParams({
         inline,
@@ -388,10 +344,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
       });
       const rawChildren = store.elementsByKeys[key].children;
 
-      const content = renderFormula(
-        rawChildren.map(String).join(""),
-        view === "block"
-      );
+      const content = renderFormula(rawChildren.map(String).join(''), view === 'block');
 
       return `<div
                 class="book-box-math book-box_media-${view} book-box_media-${layoutPosition}"
@@ -406,21 +359,17 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
     ({ key, inline = false, meta }) =>
     ({ children }) =>
       `<div class="book-box-area ${
-        inline ? "book-box-area-inline" : ""
-      }" data-name="area" data-key="${key}" data-layout="top">${listToHtml(
-        children
-      )}</div>`,
+        inline ? 'book-box-area-inline' : ''
+      }" data-name="area" data-key="${key}" data-layout="top">${listToHtml(children)}</div>`,
   item:
     ({ key }) =>
     ({ children }) =>
-      `<li data-key="${key}" data-name="item" data-layout="top">${listToHtml(
-        children
-      )}</li>`,
+      `<li data-key="${key}" data-name="item" data-layout="top">${listToHtml(children)}</li>`,
   list:
     ({ order, key }) =>
     ({ children }) => {
       const childrenHtml = listToHtml(children);
-      const elem = order ? "ol" : "ul";
+      const elem = order ? 'ol' : 'ul';
       return `<${elem}
                 data-key="${key}"
                 data-name="list"
@@ -435,15 +384,15 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
     () =>
       `<hr data-key="${key}" data-name="separator" class="book-box-separator" data-layout="top"/>`,
   external:
-    ({ scope = "custom", name = "local", params }) =>
+    ({ scope = 'custom', name = 'local', params }) =>
     ({ children }) => {
       const childrenHtml = listToHtml(children);
-      const paramsStr = params ? JSON.stringify(params) : "";
+      const paramsStr = params ? JSON.stringify(params) : '';
       return `<div data-name="external" class="book-box-external" style="" data-layout="top">
                 <p style="color: gray">
                     External: ${scope}.${name}
                 </p>
-                ${paramsStr ? `params: <pre>${paramsStr}</pre>` : ""}
+                ${paramsStr ? `params: <pre>${paramsStr}</pre>` : ''}
                 ${childrenHtml}
             </div>`;
     },
@@ -453,7 +402,7 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
     ({ children }) =>
       `<span>${listToHtml(children)}</span>`,
   use:
-    ({ ref = "", path }) =>
+    ({ ref = '', path }) =>
     ({ children, store }) => {
       const targetElement = store.elementsByKeys[ref];
       let content = listToHtml(children);
@@ -472,21 +421,62 @@ const htmlElements: BookBuilderParams<HtmlToken>["elements"] = {
       }
       return content;
     },
-  resource: () => () => "",
+  table:
+    ({ key = '', position, inline, block = true, align = 'center' }) =>
+    ({ store, build }) => {
+      const { view, position: layoutPosition } = getLayoutParams({
+        inline,
+        block,
+        position,
+      });
+
+      const tableChildren = store.elementsByKeys[key].children;
+      const isRow = (elem: BookItem) => typeof elem === 'object' && elem.name === 'row';
+      const tableContent = tableChildren.filter(elem => isRow(elem));
+      const captionContent = tableChildren.filter(elem => !isRow(elem));
+
+      const table = `<div><table>${listToHtml(build(tableContent))}</table></div>`;
+      const caption = listToHtml(build(captionContent));
+      const content = getFigure(table, caption);
+      return `<div
+                class="book-box-table book-box_media-${view} book-box_media-${layoutPosition} book-box_align-${align}"
+                data-key="${key}"
+                data-name="table"
+                data-layout="top"
+            >
+                ${content}
+            </div>`;
+    },
+  row:
+    ({ key, head = false, align }) =>
+    ({ children }) => {
+      const childrenHtml = listToHtml(children);
+      const elem = head ? 'thead' : 'tr';
+
+      return `<${elem} data-key="${key}" data-name="row" data-layout="top" class="book-box_align-${align}">${childrenHtml}</${elem}>`;
+    },
+  cell:
+    ({ key, align }) =>
+    ({ children, store, parents }) => {
+      const childrenHtml = listToHtml(children);
+      const intoHead = store.elementsByKeys[parents[0]]?.props?.head;
+
+      const elem = intoHead ? 'th' : 'td';
+
+      return `<${elem} data-key="${key}" data-name="cell" data-layout="top" class="book-box_align-${align}">${childrenHtml}</${elem}>`;
+    },
+  resource: () => () => '',
 };
 
-export const htmlSynteticElements: BookBuilderParams<HtmlToken>["synteticElements"] =
-  {
-    text:
-      ({ raw = "" }) =>
-      () =>
-        `${parseNewLines("<br/>")(
-          raw.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-        ).join("")}`,
-    page:
-      ({ count, key }) =>
-      ({ children }) =>
-        `<span
+export const htmlSynteticElements: BookBuilderParams<HtmlToken>['synteticElements'] = {
+  text:
+    ({ raw = '' }) =>
+    () =>
+      `${parseNewLines('<br/>')(raw.replace(/</g, '&lt;').replace(/>/g, '&gt;')).join('')}`,
+  page:
+    ({ count, key }) =>
+    ({ children }) =>
+      `<span
                 id="page-${count}"
                 class="book-box-page book-box_clickable"
                 data-layout="top"
@@ -496,33 +486,31 @@ export const htmlSynteticElements: BookBuilderParams<HtmlToken>["synteticElement
                 href="#page-${count}"
                 onclick="this.scrollIntoView();"
             >${listToHtml(children)}</span>`,
-    error:
-      ({ props, name, error }) =>
-      ({ children }) => {
-        const childrenHtml = listToHtml(children);
-        const propsStr = JSON.stringify(props);
-        return `<div data-name=".error" class="book-box--error">
+  error:
+    ({ props, name, error }) =>
+    ({ children }) => {
+      const childrenHtml = listToHtml(children);
+      const propsStr = JSON.stringify(props);
+      return `<div data-name=".error" class="book-box--error">
                 Error for element <i>${name}</i>:
                 <p style="color: red">
-                    ${error ?? ""}
+                    ${error ?? ''}
                     <pre>${propsStr}</pre>
                 </p>
                 ${childrenHtml}
             </div>`;
-      },
-    empty: () => () => "",
-  };
+    },
+  empty: () => () => '',
+};
 
 const htmlBuilder: BookBuilderParams<HtmlToken> = {
   elements: htmlElements,
   synteticElements: htmlSynteticElements,
 };
 
-export const createHtmlBook = getPartialApply<
-  CreateBookParams<HtmlToken>,
-  "builder",
-  BookData<HtmlToken>
->(createBook, { builder: htmlBuilder });
+export const createHtmlBook = getPartialApply<CreateBookParams<HtmlToken>, 'builder', BookData<HtmlToken>>(createBook, {
+  builder: htmlBuilder,
+});
 
 function getFigure(content: string, caption: string): string {
   return `<figure class="book-box_media-figure">

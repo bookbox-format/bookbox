@@ -1,20 +1,13 @@
 import { getBookLinkedSchema, getSchemaFromLinkedList } from './linkedSchema';
 import { BookMeta, getBookMeta } from './meta';
-import {
-  BookBuilder,
-  BookElementProps,
-  BookItem,
-  BookSchema,
-  BookStore,
-  TokenGetter,
-  BookElement,
-} from './model';
+import { BookBuilder, BookElementProps, BookItem, BookSchema, BookStore, TokenGetter, BookElement } from './model';
 import { getStore } from './store';
 import { flatList, getByPath } from '../utils';
 import { BookElements, BookElementsWithoutLevel, ElementNamespace, LevelBookElements } from './elements';
 import { ExternalBuilder, ExternalProps } from './external';
 import { calculateResources, getActualResourceMap, ResourceOptions } from './resources';
 import { getIterableBook } from './iterableBook';
+import { calculateCounters } from './counters';
 
 export type BookData<T> = {
   tokens: T[];
@@ -42,41 +35,6 @@ function addKeysToSchema(schema: BookSchema, keys: Map<string, number> = new Map
       };
     }
     addKeysToSchema(item.children, keys);
-  }
-}
-
-function calculateCounters(
-  schema: BookSchema,
-  counters: Map<string, number> = new Map(),
-  steps: Map<string, number> = new Map(),
-): void {
-  for (const item of schema) {
-    if (typeof item === 'string') {
-      continue;
-    }
-    if (item.name !== 'counter') {
-      calculateCounters(item.children, counters, steps);
-      continue;
-    }
-    const props = item.props as BookElements['counter']['props'];
-    if (props.start) {
-      counters.set(props.start, props.initial ?? 0);
-      if (props.step) {
-        steps.set(props.start, props.step);
-      }
-      continue;
-    }
-    if (props.end) {
-      counters.delete(props.end);
-      steps.delete(props.end);
-      continue;
-    }
-    if (props.use) {
-      const value = counters.get(props.use) ?? 0;
-      item.children = [`${value}`];
-      const step = steps.get(props.use) ?? 1;
-      counters.set(props.use, value + step);
-    }
   }
 }
 
@@ -126,12 +84,18 @@ export function createBook<Token>({
   prepareSchema(schema);
   const linkedSchema = getBookLinkedSchema(schema, true);
   const tokensSchema = getSchemaFromLinkedList(linkedSchema.tree);
-  const store = getStore({ builder, schema, externalBuilder });
-  const meta = getBookMeta({ schema, store, builder });
+
+  const getBuild = (currentStore: BookStore<Token>) => (localSchema: BookSchema) =>
+    builder({ schema: localSchema, store: currentStore, externalBuilder, build: getBuild(currentStore) });
+
+  const store = getStore({ builder, schema, externalBuilder, getBuild });
+  const build = getBuild(store);
+  const meta = getBookMeta({ schema, store, builder, build });
+
   schema = tokensSchema;
 
   return {
-    tokens: builder({ schema, store, externalBuilder }),
+    tokens: builder({ schema, store, externalBuilder, build }),
     meta,
     store,
   };
@@ -167,13 +131,15 @@ export function createBookBuilder<Token>({
   elements,
   synteticElements,
 }: BookBuilderParams<Token>): BookBuilder<Token, ExternalProps> {
-  const builder: BookBuilder<Token, ExternalProps> = ({ schema, store, externalBuilder }) => {
+  const builder: BookBuilder<Token, ExternalProps> = ({ schema, store, externalBuilder, parents = [], build }) => {
     const getItemBuilder: (store: BookStore<Token>) => (item: BookItem) => Token = store => item => {
       // leaf case
       if (typeof item === 'string') {
         return synteticElements.text({ raw: item, key: '' })({
           children: [],
           store,
+          parents,
+          build,
         });
       }
 
@@ -217,6 +183,8 @@ export function createBookBuilder<Token>({
         })({
           children,
           store,
+          parents,
+          build,
         });
       };
 
@@ -227,6 +195,8 @@ export function createBookBuilder<Token>({
           schema: item.children,
           store,
           externalBuilder,
+          parents: [...parents, `${item.props.key}`],
+          build,
         });
       } catch (e) {
         console.error(e);
@@ -242,6 +212,8 @@ export function createBookBuilder<Token>({
         return elemBuilder(item.props)({
           children: childTokens,
           store,
+          parents,
+          build,
         });
       } catch (e) {
         console.error(e);

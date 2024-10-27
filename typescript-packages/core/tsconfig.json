@@ -11,7 +11,8 @@
     "module": "esnext",
     "moduleResolution": "node",
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": true
   },
+  "include": ["src"],
   "exclude": ["**/*.test.ts"]
 }

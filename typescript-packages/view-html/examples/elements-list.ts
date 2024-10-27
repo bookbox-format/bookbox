@@ -1,5 +1,5 @@
-import { BookApi, getBookSchema } from "@bookbox/generator-js";
-import { writeFileSync } from "fs";
+import { BookApi, getBookSchema } from '@bookbox/generator-js';
+import { writeFileSync } from 'fs';
 
 export const elementsListBook = (_: BookApi) => _.book.root`
 ${_.resource.path`/video.mp4`.src('./resources/video.mp4')}
@@ -20,11 +20,11 @@ ${_.strong`Strong`}
 ${_.em`Em`}
 
 
-${_.code.lang("javascript")`const x = 1 + Math.random();`}
+${_.code.lang('javascript')`const x = 1 + Math.random();`}
 
-${_.code.lang("javascript")`const x = 'longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong'`}
+${_.code.lang('javascript')`const x = 'longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong'`}
 
-${_.code.lang('typescript').key("code")`
+${_.code.lang('typescript').key('code')`
 import { HtmlToken } from "./model";
 import hljs from 'highlight.js';
 
@@ -102,13 +102,13 @@ ${_.code.lang('css')`
 `}
 
 
-${_.tooltip.content("tooltip text")`tooltip label`}
+${_.tooltip.content('tooltip text')`tooltip label`}
 
 
-${_.label.ref("code")`label`}
+${_.label.ref('code')`label`}
 
 
-${_.link.href("https://ya.ru")`yandex link`}
+${_.link.href('https://ya.ru')`yandex link`}
 
 
 ${_.math.block()`a^n + b^{n^n} = c^n`}
@@ -121,13 +121,13 @@ ${_.draft`draft`}
 ${_.external`external`}
 
 
-${_.image.src("/image.svg").alt("test image")`image`}
+${_.image.src('/image.svg').alt('test image')`image`}
 
 
-${_.video.src("/video.mp4")``}
+${_.video.src('/video.mp4')``}
 
 
-${_.audio.src("/audio.mp3")``}
+${_.audio.src('/audio.mp3')``}
 
 
 ${_.list.order()`
@@ -139,42 +139,195 @@ ${_.item`item c`}
 
 ${_.separator``}
 
+${_.counter.start`example`}
+Счётчик с числами
+
++ ${_.counter.use`example`}
+
++ ${_.counter.use`example`}
+
++ ${_.counter.use`example`}
+
+last ${_.counter.last`example`}
+
+
+${_.counter.start`exampler`.type('roman')}
+Счётчик с римскими числами
+
++ ${_.counter.use`exampler`}
+
++ ${_.counter.use`exampler`}
+
++ ${_.counter.use`exampler`}
+
++ ${_.counter.use`exampler`}
+
+last ${_.counter.last`exampler`}
+
+
+${_.counter.start`example2`.type('latin')}
+Счётчик с латинскими буквами
+
++ ${_.counter.use`example2`}
+
++ ${_.counter.use`example2`}
+
++ ${_.counter.use`example2`}
+
+last ${_.counter.last`example2`}
+
+last ${_.counter.last`example2`}
+
+
+${_.counter.start`example3`.type('cyrillic')}
+Счётчик с рускими буквами
+
++ ${_.counter.use`example3`}
+
++ ${_.counter.use`example3`}
+
++ ${_.counter.use`example3`}
+
+last ${_.counter.last`example3`}
+
+last ${_.counter.last`example3`}
+
+
+${_.counter.start`example4`.type('char').initial('α')}
+Счётчик с символами юникода
+
++ ${_.counter.use`example4`}
+
++ ${_.counter.use`example4`}
+
++ ${_.counter.use`example4`}
+
++ ${_.counter.use`example4`}
+
+last ${_.counter.last`example4`}
+
+last ${_.counter.last`example4`}
+
+
+Поведение прорутки смотрите в ${_.label.ref('table-example')`длинной таблице`}
+
+${_.table`
+${_.row.head(true)`
+${_.cell`A`}
+${_.cell`!A`}
+`}
+${_.row`
+${_.cell`0`}
+${_.cell`1`}
+`}
+${_.row`
+${_.cell`1`}
+${_.cell`0`}
+`}
+Таблица истинности для отрицания
+`}
+
+${_.table.key`table-example``
+  ${_.row.head(true)`
+  ${_.cell`A`}
+  ${_.cell`!A`}
+  ${_.cell`!!A`}
+  ${_.cell`!!!A`}
+  ${_.cell`!!!!A`}
+  ${_.cell`!!!!!A`}
+  ${_.cell`!!!!!!A`}
+  ${_.cell`!!!!!!!A`}
+  ${_.cell`!!!!!!!!A`}
+  ${_.cell`!!!!!!!!!A`}
+  ${_.cell`!!!!!!!!!!A`}
+  ${_.cell`!!!!!!!!!!!A`}
+  `}
+  ${_.row`
+  ${_.cell`0`}
+  ${_.cell`1`}
+    ${_.cell`0`}
+  ${_.cell`1`}
+    ${_.cell`0`}
+  ${_.cell`1`}
+    ${_.cell`0`}
+  ${_.cell`1`}
+    ${_.cell`0`}
+  ${_.cell`1`}
+    ${_.cell`0`}
+  ${_.cell`1`}
+  `}
+  ${_.row`
+  ${_.cell`1`}
+  ${_.cell`0`}
+  ${_.cell`1`}
+  ${_.cell`0`}
+  ${_.cell`1`}
+  ${_.cell`0`}
+  ${_.cell`1`}
+  ${_.cell`0`}
+  ${_.cell`1`}
+  ${_.cell`0`}
+  ${_.cell`1`}
+  ${_.cell`0`}
+  `}
+  Очень широкая таблица истинности для отрицания с многократным дублированием колонок
+  `}
+
+
 ${_.header.level(2)`Long text`}
 
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ex est, efficitur in sagittis sed, malesuada vel lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse pulvinar odio ut metus sollicitudin euismod. Ut a arcu dui. Morbi mauris magna, pharetra eu elit nec, hendrerit blandit nisl. Suspendisse laoreet tellus eget ex efficitur, sit amet pretium mauris ultricies. Suspendisse potenti. Suspendisse sapien augue, vulputate quis sodales ac, vehicula nec lacus. Donec vitae laoreet massa. Vestibulum pretium sodales nunc. Nam dapibus tristique quam eu venenatis. Donec nibh risus, laoreet eget mattis nec, aliquam dignissim urna. Vestibulum eget commodo turpis.
 
+${_.separator}
+
 Duis rutrum dignissim magna quis viverra. Praesent pellentesque scelerisque quam ac mattis. Proin nunc metus, pellentesque at tellus in, fringilla lacinia dui. Duis dolor ligula, fermentum ac velit eu, tempor porta urna. Nullam ornare nisi vitae orci fermentum, vitae pretium neque tempor. Maecenas vitae sagittis urna. In ac luctus libero, ut aliquet lectus. Nunc turpis felis, efficitur facilisis congue vitae, aliquam eget mi. In rutrum tempor bibendum. Vestibulum posuere lacinia ipsum quis bibendum. Nullam laoreet aliquam dolor, a dignissim elit. Cras nec nisl venenatis, interdum purus eu, volutpat orci. Duis fermentum ut nisl a pharetra. Duis vehicula nisi vitae justo viverra, sit amet porta sem euismod.
+
 
 Vestibulum eleifend dolor sed mauris posuere, at elementum velit suscipit. Fusce pharetra fringilla elit, semper volutpat risus euismod ac. Cras mattis ligula orci, non venenatis dui congue quis. Suspendisse tincidunt eget diam in fringilla. Pellentesque hendrerit ultrices orci, eu lobortis nisi condimentum eget. Nulla sit amet erat tincidunt, imperdiet mauris in, sollicitudin risus. Proin dolor justo, vestibulum mollis euismod in, ultricies non enim. Vestibulum vulputate elementum metus vitae accumsan. Etiam facilisis mauris a enim condimentum tempus.
 
+
 Fusce volutpat, nulla in semper blandit, purus magna rhoncus ipsum, et finibus mauris enim eu arcu. Phasellus luctus rutrum malesuada. Etiam sed diam mi. Donec a dolor quis purus convallis accumsan nec sed quam. In tristique malesuada magna tristique dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam pulvinar viverra mi, at consectetur leo.
+
 
 Sed congue ornare tortor in hendrerit. Quisque malesuada eu arcu ut tempus. In at eros lobortis tortor pellentesque laoreet at et mauris. Quisque quis nulla dictum, consectetur arcu id, gravida turpis. Etiam pellentesque ligula dolor, id placerat orci porttitor nec. Cras ac arcu vestibulum metus hendrerit commodo. Praesent vel rutrum turpis, quis faucibus orci. Praesent non libero eget dolor maximus sollicitudin in vitae nunc. Fusce non nulla massa. Donec elementum nibh eget porttitor eleifend. Fusce tempus tristique ex, eget scelerisque tellus efficitur non.
 
+
 Proin at tellus sit amet erat volutpat efficitur. Morbi et sapien dui. Cras et tincidunt velit. Etiam cursus ultricies libero. Nullam non semper urna. In viverra cursus elit. Quisque sed mauris et dui mollis vehicula. Etiam eleifend eleifend sem. Nam pellentesque, purus eu elementum euismod, ante nisl aliquam massa, eget fermentum nisl velit non turpis. Nullam congue dictum est, ac hendrerit turpis dictum commodo. Nam vestibulum porta placerat. Nulla eget lobortis lacus. In quam magna, luctus vitae imperdiet in, tincidunt in nisl. Nam bibendum quam in nibh tristique eleifend.
+
 
 Vivamus vel venenatis neque, sit amet mattis ante. Vivamus interdum ut ante tincidunt congue. Etiam pretium magna a turpis congue congue. Vestibulum dapibus imperdiet varius. Donec in velit pharetra, pretium orci non, porta ligula. Pellentesque convallis feugiat enim, ac vulputate ligula aliquet sit amet. Proin ac aliquet felis. Cras venenatis turpis libero, in pellentesque velit rutrum non.
 
+
 Duis facilisis velit eget est feugiat, et scelerisque nisl facilisis. Donec malesuada nisi erat, sed malesuada orci cursus a. Praesent et placerat nisi. Duis ex lorem, aliquet sit amet turpis vel, aliquet condimentum ipsum. Proin in erat blandit, vestibulum nunc suscipit, tincidunt orci. Suspendisse ultrices massa vel turpis commodo fringilla. Vivamus ultrices est ut gravida ultrices. Morbi quis tellus mauris. Donec tristique leo a odio pellentesque efficitur. Quisque tincidunt, purus sed scelerisque fermentum, velit quam venenatis est, auctor blandit diam nunc nec justo. Donec porttitor vitae urna in blandit. Aenean rhoncus posuere volutpat. Aliquam erat volutpat. Pellentesque quis augue id erat lacinia luctus ut placerat libero.
+
 
 Maecenas tristique et nulla nec elementum. Donec egestas at erat eget tincidunt. Ut sem lectus, porta ut dui non, aliquam rutrum risus. Donec tincidunt leo ut arcu auctor, id euismod mi cursus. Vestibulum vehicula turpis at venenatis lacinia. Nullam lobortis dolor eu lectus feugiat ultrices. Praesent volutpat iaculis tellus, dapibus ullamcorper justo blandit et. Cras vestibulum congue enim, et mattis arcu dapibus a. In placerat consectetur quam, in vulputate nulla tincidunt non. Aliquam dapibus eget mauris sit amet porttitor. Integer vel odio finibus, ornare ex eget, accumsan purus. Donec placerat erat id turpis laoreet venenatis. Phasellus quam enim, imperdiet vel blandit id, porta nec felis. Proin rhoncus eros in massa cursus finibus. Phasellus mollis odio nec mi efficitur consequat. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
+
 Vivamus gravida consequat dignissim. Morbi mauris enim, consectetur nec tempus vitae, scelerisque ac mauris. Nam at orci vitae diam consequat scelerisque. Phasellus vel elit in lorem ullamcorper euismod. Suspendisse eu est at eros ullamcorper ultricies. Etiam tempus, ligula non consectetur sodales, urna nunc sagittis risus, et varius libero diam eget justo. Integer consequat eget eros ac maximus. In fringilla, neque at porttitor porttitor, neque magna varius augue, vitae consectetur lacus nibh eget ex. Pellentesque lacinia vitae nibh id congue. Integer nisi nunc, pellentesque vitae molestie nec, dictum ultricies arcu. Ut ut rutrum ipsum. Donec facilisis nisi ac maximus convallis.
+
 
 Ut imperdiet ex eu velit elementum elementum. Donec id diam nisi. Quisque sagittis accumsan iaculis. Aliquam porttitor condimentum nibh sed semper. In quam mauris, placerat a porta id, luctus ac diam. Integer nulla magna, dapibus ut nisi in, accumsan accumsan est. Phasellus condimentum arcu sed erat fringilla commodo.
 
+
 Curabitur nibh ex, egestas vitae placerat eget, ultrices eu libero. Pellentesque eu bibendum metus. Sed malesuada cursus velit, ut faucibus odio convallis sed. Suspendisse potenti. Donec lobortis aliquet quam, ac pulvinar ligula commodo vel. Ut tempor enim lectus, et vestibulum dolor hendrerit ac. Nulla facilisi. Aenean massa risus, dapibus vitae condimentum ac, ultrices vel lacus. Duis quis laoreet arcu. Nam at justo mollis, tristique lorem non, laoreet neque.
+
 
 Quisque accumsan turpis in felis lacinia sollicitudin. Etiam sit amet eros quis diam tincidunt mattis. Morbi ac tincidunt sapien, non cursus eros. Nulla rutrum malesuada ligula. Fusce euismod orci a consequat euismod. Mauris varius vel lectus vel rhoncus. Sed et mollis libero. Quisque tristique erat eget arcu tincidunt mattis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In convallis bibendum fringilla. Vestibulum vulputate lacus at pharetra dignissim. Donec blandit ex sed dui iaculis, in sodales sapien vulputate. Cras tempor nibh sed massa mollis condimentum.
 
+
 Maecenas a odio hendrerit, porttitor tellus nec, blandit ante. Aenean libero metus, malesuada ut malesuada nec, rhoncus et lacus. Nulla facilisi. In lobortis varius sollicitudin. Nulla facilisi. Curabitur cursus faucibus hendrerit. Mauris viverra quam eget dolor consequat posuere. Nam pharetra tincidunt orci. Mauris sodales ultrices odio quis mattis. Nam sit amet consequat ex, quis facilisis leo. Integer maximus tellus et bibendum condimentum. Aenean ac quam sed nisi imperdiet egestas eget nec sapien. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Praesent molestie mi ac aliquet molestie.
+
 
 Phasellus mollis mauris nulla, in auctor turpis malesuada consequat. Pellentesque sodales ornare tellus ac iaculis. Cras dui ipsum, faucibus eget quam at, gravida ornare massa. Duis lacinia tortor sem. Nam tempor, eros et volutpat consequat, elit velit malesuada sapien, quis efficitur nibh tortor in tortor. Morbi tristique odio ut ipsum congue, quis convallis lorem porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
 
+
 Suspendisse placerat non velit a fermentum. Donec interdum, arcu condimentum sodales consectetur, erat sapien varius orci, sit amet pretium sapien justo non enim. Sed hendrerit, nibh a condimentum imperdiet, sem velit rhoncus sem, eget venenatis nunc magna ac turpis. Cras id urna id est mattis ultricies. Duis rutrum tellus nibh, eget sollicitudin eros maximus rutrum. Donec in mauris nisl. Nunc consectetur sapien quis justo volutpat sodales. Suspendisse molestie, felis sit amet lacinia ultricies, ligula ex commodo velit, non egestas libero est et felis. In sed magna laoreet ipsum volutpat pharetra. Donec eu libero condimentum, imperdiet arcu in, sollicitudin dolor.
 
+
 In convallis magna sed nunc accumsan, quis vulputate mauris ultrices. Nunc cursus tortor id est rutrum, non venenatis lacus ullamcorper. In neque tellus, commodo a bibendum at, tempor at nisl. In ac commodo dolor, ac rhoncus felis. Vivamus scelerisque eros nunc, eu ultricies dui tincidunt sit amet. Maecenas ipsum dui, auctor in arcu ut, ornare tempor augue. Etiam eget urna velit. Sed quis varius nunc. Ut metus dui, convallis vitae suscipit vel, ultrices non dolor. Nam sed eros a lacus euismod commodo. Ut scelerisque sit amet dui nec euismod. Etiam bibendum, lacus eget congue vehicula, mi velit volutpat sapien, vitae feugiat velit felis quis neque. Quisque faucibus ultrices justo, et tempor ligula pretium consectetur. Suspendisse eu lorem vestibulum, condimentum velit sit amet, dictum arcu. Integer eget dignissim elit.
+
 
 Duis rutrum, urna vel feugiat sagittis, urna enim eleifend purus, id finibus urna lectus id lacus. Integer semper scelerisque sapien eget ultrices. Nulla dapibus dui et est tincidunt, eget sollicitudin leo rhoncus. Aenean commodo mi metus, sed interdum lorem condimentum quis. Fusce cursus nunc eget neque consequat tincidunt. Morbi id nunc vehicula, iaculis tortor in, placerat ligula. Pellentesque nec ipsum in quam semper interdum. Donec aliquet non sem sit amet consequat. Nulla iaculis elit non ante dapibus dapibus. Cras hendrerit et risus nec vehicula. Nunc at malesuada sapien.
 
@@ -251,5 +404,4 @@ ${_.separator}
 
 const { schema } = getBookSchema({ book: elementsListBook });
 
-writeFileSync("./elements-list.json", JSON.stringify(schema, null, 2))
-
+writeFileSync('./elements-list.json', JSON.stringify(schema, null, 2));

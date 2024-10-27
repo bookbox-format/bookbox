@@ -32,12 +32,17 @@ export type MetaElements = GetElements<{
   authors: {};
 }>;
 
-export type LayoutPosition = 'inline' | 'end' | 'start' | 'center' | 'full';
+export type LayoutAlign = 'end' | 'start' | 'center';
+export type LayoutPosition = 'inline' | 'full' | LayoutAlign;
 
 export type LayoutProps = {
   block?: boolean;
   inline?: boolean;
   position?: LayoutPosition;
+};
+
+export type TextAlignProps = {
+  align?: LayoutAlign;
 };
 
 export type InteractionProps = {
@@ -112,6 +117,8 @@ export type MediaElements = GetElements<{
 export type TextFormatElements = GetElements<{
   'format.b': LayoutProps;
   'format.i': LayoutProps;
+  'format.u': LayoutProps;
+  'format.s': LayoutProps;
   'format.sup': LayoutProps;
   'format.sub': LayoutProps;
   'format.pre': LayoutProps;
@@ -132,6 +139,9 @@ export type LayoutElements = GetElements<{
   list: { order?: boolean };
   item: {};
   separator: {};
+  table: LayoutProps & TextAlignProps;
+  row: { head?: boolean } & TextAlignProps;
+  cell: TextAlignProps;
 }>;
 
 export type StoreElements = GetElements<{
@@ -149,16 +159,19 @@ export type StoreElements = GetElements<{
     start?: string;
     end?: string;
     use?: string;
+    last?: string;
 
     /**
      * initial counter value, by default `0`
      */
-    initial?: number;
+    initial?: number | string;
 
     /**
      * counter step, by default `1`
      */
     step?: number;
+
+    type?: 'number' | 'char' | 'latin' | 'roman' | 'big-roman' | 'big-latin' | 'cyrillic' | 'big-cyrillic';
   };
 
   resource: { path: string; src: string; type?: keyof MediaElements };
