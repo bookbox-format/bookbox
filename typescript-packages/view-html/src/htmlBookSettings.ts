@@ -32,8 +32,9 @@ export function getBookBoxHtmlSettingsDesign({ bookData }: BookBoxHtmlParams): H
   const content = `<div>
   <h2>Theme</h2>
   <div style="display: flex; gap: 16px">
-  <div onclick="document.querySelector('.book-box').classList.remove('book-box_theme-dark');localStorage.setItem('book-box-theme', 'light')" class="book-box_layout-settings-design-theme"><div></div>Light</div>
-  <div onclick="document.querySelector('.book-box').classList.add('book-box_theme-dark');localStorage.setItem('book-box-theme', 'dark')" class="book-box_layout-settings-design-theme"><div></div>Dark</div>
+  <div onclick="document.querySelector('.book-box').classList.remove('book-box_theme-dark');document.querySelector('.book-box').classList.remove('book-box_theme-sepia');localStorage.setItem('book-box-theme', 'light')" class="book-box_layout-settings-design-theme"><div style="background: white"></div>Light</div>
+  <div onclick="document.querySelector('.book-box').classList.add('book-box_theme-dark');document.querySelector('.book-box').classList.remove('book-box_theme-sepia');localStorage.setItem('book-box-theme', 'dark')" class="book-box_layout-settings-design-theme"><div style="background: var(--book-box-color-label-dark)"></div>Dark</div>
+  <div onclick="document.querySelector('.book-box').classList.add('book-box_theme-sepia');document.querySelector('.book-box').classList.remove('book-box_theme-dark');localStorage.setItem('book-box-theme', 'sepia')" class="book-box_layout-settings-design-theme"><div style="background: var(--book-box-color-label-sepia)"></div>Sepia</div>
   </div>
   </div>`;
   const panel = getPanel({

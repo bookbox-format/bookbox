@@ -1,4 +1,4 @@
-export type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'dark' | 'sepia';
 
 export type SetThemeOptions = {
   theme: Theme;
@@ -15,12 +15,13 @@ function getBookboxNodes(options: SetThemeOptions) {
 }
 
 const darkClassName = 'book-box_theme-dark';
+const sepiaClassName = 'book-box_theme-sepia';
 
 export function setTheme(options: SetThemeOptions) {
   const { theme } = options;
   for (const node of getBookboxNodes(options)) {
     if (theme === 'dark') node.classList.add(darkClassName);
-    else node.classList.remove(darkClassName);
+    if (theme === 'sepia') node.classList.add(sepiaClassName);
   }
 }
 
@@ -31,6 +32,6 @@ export function setSavedTheme(options?: Omit<SetThemeOptions, 'theme'> & { stora
   const { storageKey } = options ?? {};
   const savedTheme = localStorage.getItem(storageKey ?? THEME_STORE_KEY);
   if (!savedTheme) return;
-  if (savedTheme !== 'dark' && savedTheme !== 'light') return;
+  if (savedTheme !== 'dark' && savedTheme !== 'light' && savedTheme !== 'sepia') return;
   setTheme({ theme: savedTheme, ...(options ?? {}) });
 }

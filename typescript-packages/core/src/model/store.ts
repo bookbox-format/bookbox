@@ -1,14 +1,16 @@
 import { ExternalBuilder } from './external';
-import { BookBuilder, BookElementSchema, BookSchema, BookStore } from './model';
+import { BookBuilder, BookElementSchema, BookSchema, BookStore, BuildTokens } from './model';
 
 export function getStore<T>({
   builder,
   schema,
   externalBuilder,
+  getBuild,
 }: {
   schema: BookSchema;
   builder: BookBuilder<T>;
   externalBuilder?: ExternalBuilder<T>;
+  getBuild(currentStore: BookStore<T>): BuildTokens<T>;
 }): BookStore<T> {
   const result: BookStore<T> = {
     dataByKeys: {},
@@ -20,6 +22,7 @@ export function getStore<T>({
       schema: [elem],
       store: result,
       externalBuilder,
+      build: getBuild(result),
     });
   }
   return result;
