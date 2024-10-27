@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/preset-web",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Bookbox web preset",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -25,8 +25,11 @@
   "author": "Alexandr Nikolaichev",
   "license": "MIT",
   "dependencies": {
-    "@bookbox/core": "^0.2.0",
-    "@bookbox/generator-js": "^0.1.2",
-    "@bookbox/view-html": "^0.2.0"
+    "@bookbox/core": "^0.3.0",
+    "@bookbox/generator-js": "^0.2.0",
+    "@bookbox/view-html": "^0.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
   }
 }
