@@ -1,6 +1,6 @@
 import { BookHeader, BookItemMeta, BookStore, rootBookHeader } from '@bookbox/core';
 
-import { BookBoxHtmlGenerateParams, BookBoxHtmlParams, HtmlToken, listToHtml } from './model';
+import { BookBoxHtmlGenerateParams, BookBoxHtmlParams, BookBoxNavigationItem, HtmlToken, listToHtml } from './model';
 
 export function getBookBoxHtmlSettings({
   bookData,
@@ -8,7 +8,7 @@ export function getBookBoxHtmlSettings({
   layoutOptions,
 }: BookBoxHtmlGenerateParams): HtmlToken {
   const { tokens, meta, store } = bookData;
-  const { viewTumbler = true, design = true, media = true, contents = true } = settingsOptions ?? {};
+  const { viewTumbler = true, design = true, media = true, contents = true, custom = {} } = settingsOptions ?? {};
   const { fullPage = false } = layoutOptions ?? {};
   const viewId = `settings-view`;
   return `
@@ -22,6 +22,17 @@ export function getBookBoxHtmlSettings({
       ${design ? getBookBoxHtmlSettingsDesign({ bookData }) : ''}
       ${media ? getBookBoxHtmlSettingsMedia({ bookData }) : ''}
       ${contents ? getBookBoxHtmlSettingsContents({ bookData }) : ''}
+      ${Object.keys(custom)
+        .map(settingsNamespace => {
+          const { icon, getItems } = custom[settingsNamespace];
+          const items = getItems({ bookData });
+          return getNavigationPanel({
+            settingsNamespace,
+            icon,
+            content: listToHtml(items.map(item => getBookBoxHtmlNavigationItem({ ...item, settingsNamespace }))),
+          });
+        })
+        .join('\n')}
     </div>
     `;
 }
@@ -29,12 +40,29 @@ export function getBookBoxHtmlSettings({
 export function getBookBoxHtmlSettingsDesign({ bookData }: BookBoxHtmlParams): HtmlToken {
   const { tokens, meta, store } = bookData;
   const { contents } = meta;
+  const themes = ['light', 'dark', 'sepia'];
+  const getThemeItem = (theme: string, color: string, name: string) => `
+<div
+  onclick="
+    document.querySelector('.book-box').classList.add('book-box_theme-${theme}');
+    ${themes
+      .filter(x => theme !== x)
+      .map(otherTheme => `document.querySelector('.book-box').classList.remove('book-box_theme-${otherTheme}');`)
+      .join('')}
+    localStorage.setItem('book-box-theme', '${theme}')
+  "
+  class="book-box_layout-settings-design-theme"
+>
+  <div style="background: ${color}"></div>
+  ${name}
+</div>`;
+
   const content = `<div>
   <h2>Theme</h2>
   <div style="display: flex; gap: 16px">
-  <div onclick="document.querySelector('.book-box').classList.remove('book-box_theme-dark');document.querySelector('.book-box').classList.remove('book-box_theme-sepia');localStorage.setItem('book-box-theme', 'light')" class="book-box_layout-settings-design-theme"><div style="background: white"></div>Light</div>
-  <div onclick="document.querySelector('.book-box').classList.add('book-box_theme-dark');document.querySelector('.book-box').classList.remove('book-box_theme-sepia');localStorage.setItem('book-box-theme', 'dark')" class="book-box_layout-settings-design-theme"><div style="background: var(--book-box-color-label-dark)"></div>Dark</div>
-  <div onclick="document.querySelector('.book-box').classList.add('book-box_theme-sepia');document.querySelector('.book-box').classList.remove('book-box_theme-dark');localStorage.setItem('book-box-theme', 'sepia')" class="book-box_layout-settings-design-theme"><div style="background: var(--book-box-color-label-sepia)"></div>Sepia</div>
+  ${getThemeItem('light', 'white', 'Light')}
+  ${getThemeItem('dark', 'var(--book-box-color-label-dark)', 'Dark')}
+  ${getThemeItem('sepia', 'var(--book-box-color-label-sepia)', 'Sepia')}
   </div>
   </div>`;
   const panel = getPanel({
@@ -52,12 +80,16 @@ export function getBookBoxHtmlSettingsDesign({ bookData }: BookBoxHtmlParams): H
     </div>`;
 }
 
-function getBookBoxHtmlContentHeader(item: BookHeader<HtmlToken>): HtmlToken {
-  const { value, level, key } = item;
+interface GetBookBoxHtmlNavigationItemParams {
+  settingsNamespace: string;
+}
+
+function getBookBoxHtmlNavigationItem(params: GetBookBoxHtmlNavigationItemParams & BookBoxNavigationItem) {
+  const { settingsNamespace, key, value, level = 1 } = params;
   const offset = Math.max(level, 1);
   const offsetCss = `${offset * 2}ch`;
   return `<div
-        class="book-box_layout-settings-contents-item"
+        class="book-box_layout-settings-navigation_item book-box_layout-settings-${settingsNamespace}-item"
         style="padding-left: ${offsetCss};"
         data-level="${level}"
         data-ref-key="${key}"
@@ -67,23 +99,36 @@ function getBookBoxHtmlContentHeader(item: BookHeader<HtmlToken>): HtmlToken {
     </div>`;
 }
 
-export function getBookBoxHtmlSettingsContents({ bookData }: BookBoxHtmlParams): HtmlToken {
-  const { tokens, meta, store } = bookData;
-  const { contents } = meta;
-  const content = listToHtml(contents.map(getBookBoxHtmlContentHeader));
+function getBookBoxHtmlContentHeader(item: BookHeader<HtmlToken>): HtmlToken {
+  const { value, level, key } = item;
+  return getBookBoxHtmlNavigationItem({ settingsNamespace: 'contents', key, value, level });
+}
+
+function getNavigationPanel(params: { settingsNamespace: string; icon: HtmlToken; content: HtmlToken }) {
+  const { settingsNamespace, icon, content } = params;
+
   const panel = getPanel({
-    prefix: 'settings-contents',
-    tumbler: { content: '📚', classes: ['book-box_layout-settings-item'] },
+    prefix: `settings-${settingsNamespace}`,
+    tumbler: { content: icon, classes: ['book-box_layout-settings-item'] },
     panel: {
       content,
-      name: 'Contents',
+      name: settingsNamespace[0].toUpperCase() + settingsNamespace.slice(1),
       classes: ['book-box_layout-settings-panel'],
     },
     fast: true,
   });
-  return `<div class="book-box_layout-settings-contents">
+
+  return `<div class="book-box_layout-settings-namespace book-box_layout-settings-${settingsNamespace}">
         ${panel}
     </div>`;
+}
+
+export function getBookBoxHtmlSettingsContents({ bookData }: BookBoxHtmlParams): HtmlToken {
+  const { tokens, meta, store } = bookData;
+  const { contents } = meta;
+  const content = listToHtml(contents.map(getBookBoxHtmlContentHeader));
+
+  return getNavigationPanel({ content, icon: '📚', settingsNamespace: 'contents' });
 }
 
 function bookBoxHtmlSettingsMediaBlockGetter(

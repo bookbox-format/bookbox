@@ -141,6 +141,19 @@
   top: 0;
 }
 
+.book-box_layout-settings-namespace .book-box_layout-panel {
+  grid-template-columns: 1fr auto;
+}
+
+.book-box_layout-settings-navigation_item {
+  padding: 4px 1rem;
+}
+
+.book-box_layout-settings-navigation_item:hover {
+  background-color: var(--book-box-color-background-hover);
+  color: var(--book-box-color-text-accent);
+  cursor: pointer;
+}
 /* End: Settings */
 
 /* Contents */

@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/core",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Bookbox — e-book format",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -25,7 +25,7 @@
   "author": "Alexandr Nikolaichev",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^29.2.0",
+    "@types/jest": "^29.5.14",
     "jest": "^29.2.2",
     "onchange": "^7.1.0",
     "ts-jest": "^29.0.3",

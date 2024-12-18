@@ -8,11 +8,24 @@ export type BookBoxHtmlParams = {
   bookData: BookData<HtmlToken>;
 };
 
+export type BookBoxNavigationItem = {
+  key: string;
+  value: HtmlToken[];
+  level?: number;
+};
+
 export type BookBoxSettingsParams = {
   viewTumbler?: boolean;
   design?: boolean;
   media?: boolean;
   contents?: boolean;
+  custom?: Record<
+    string,
+    {
+      icon: HtmlToken;
+      getItems(params: BookBoxHtmlParams): BookBoxNavigationItem[];
+    }
+  >;
 };
 
 export type BookBoxLayoutParams = {
