@@ -1,14 +1,24 @@
 import { gotoKey } from '../goto';
+import { getCurrentPage } from '../navigation';
+import { setTheme } from '../theme';
 
 declare global {
   interface Window {
-    gotoKey(key: string): void;
+    bbx: {
+      gotoKey: typeof gotoKey;
+      setTheme: typeof setTheme;
+      getCurrentPage: typeof getCurrentPage,
+    };
   }
 }
 
 /**
- * `gotoKey` — global function
+ * global functions
  */
 export function setGlobalActions() {
-  window.gotoKey = gotoKey;
+  window.bbx = {
+    gotoKey,
+    setTheme,
+    getCurrentPage,
+  };
 }

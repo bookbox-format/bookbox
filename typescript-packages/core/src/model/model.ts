@@ -9,6 +9,7 @@ export type BookElementSchema = {
   name: string;
   props: BookElementProps;
   children: BookSchema;
+  marker?: 'start' | 'end';
 };
 
 export type BookItem = BookElementSchema | string;
@@ -38,11 +39,11 @@ export type BookLinkedSchema = {
   tree: BookLinkedItem[];
 };
 
-export type CommonElementProps = { key: string; meta: Record<string, Primitive> };
+export type CommonElementProps = { key: string; meta: Record<string, Primitive>; hidden: boolean };
 
 export type BookElement<Name extends string, Props extends BookElementProps = {}> = {
   name: Name;
-  props: Props & { key: string; meta: Record<string, Primitive> };
+  props: Props & CommonElementProps;
 };
 
 export type ElementName<Element extends BookElement<any, any>> = Element extends BookElement<infer Name, any>

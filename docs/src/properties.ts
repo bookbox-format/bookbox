@@ -1,6 +1,6 @@
-import type { FBook } from "@bookbox/preset-web";
+import type { js } from "@bookbox/preset-web";
 
-export const Properties: FBook = api => {
+export const Properties: js.FBook = api => {
     const {
         book,
         header,
@@ -31,6 +31,20 @@ ${header.level(4)`Record<T>`}
 ${end(area)}
 
 
+${start(area.key`type-LayoutAlign`)}
+${header.level(4)`LayoutAlign`}
+LayoutAlign — положение блока или текста относительно потока документа, строковое значения.
+
+
+Возможные значения:
+${list`
+${item`${em`center`} — блок выровнен по центру`}
+${item`${em`start`} — блок прижимается к стороне, от которой направлен текст (левая для большинства языков)`}
+${item`${em`end`} — блок прижимается к стороне, на которую направлен текст (правая для большинства языков)`}
+`}
+${end(area)}
+
+
 ${start(area.key`type-LayoutPosition`)}
 ${header.level(4)`LayoutPosition`}
 LayoutPosition — положение блока относительно потока документа, строковое значения.
@@ -38,10 +52,8 @@ LayoutPosition — положение блока относительно пот
 
 Возможные значения:
 ${list`
+${item`...${label.ref('type-LayoutAlign')`LayoutAlign`}`}
 ${item`${em`full`} — блок растягивается на всю ширину`}
-${item`${em`center`} — блок выровнен по центру`}
-${item`${em`start`} — блок прижимается к стороне, от которой направлен текст (левая для большинства языков)`}
-${item`${em`end`} — блок прижимается к стороне, на которую направлен текст (правая для большинства языков)`}
 ${item`${em`inline`} — блок ведёт себя как текст, встраивается в строку`}
 `}
 ${end(area)}
@@ -101,5 +113,17 @@ ${item`${em`width`}: ${label.ref('type-BookElementSize')`BookElementSize`} — �
 ${item`${em`height`}: ${label.ref('type-BookElementSize')`BookElementSize`} — высота элемента относительно области видимости (именно области видимости, а не высоты книги, так как книга листается вертикально и её высота может быть сколь угодно велика)`}
 `}
 ${end(area)}
+
+${start(area.key`type-TextAlignProps`)}
+${header.level(4)`TextAlignProps`}
+TextAlignProps — свойства для выравнивания текста.
+
+
+Поля
+${list`
+${item`${em`align`}: ${label.ref('type-LayoutAlign')`LayoutAlign`} — положение выравнивания текста`}
+`}
+${end(area)}
+
 `;
 };

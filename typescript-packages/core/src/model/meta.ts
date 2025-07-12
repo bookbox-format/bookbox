@@ -8,6 +8,7 @@ export type BookItemMeta = {
 export type BookMeta<T> = {
   contents: BookHeader<T>[];
   media: Record<keyof MediaElements, BookItemMeta>;
+  pages: BookItemMeta;
 };
 
 function getGroup<T>({
@@ -86,19 +87,6 @@ const getContents = <T>(builder: BookBuilder<T>, store: BookStore<T>, build: Bui
   });
 };
 
-const getImageList = getGroup({
-  condition: e => e.name === 'image',
-  map: e => e,
-});
-const getImages = <T>(schema: BookSchema): BookMeta<T>['media']['image'] => {
-  const imageList = getImageList(schema);
-  return {
-    keysList: imageList.map(e => e.props.key as string),
-    keysByHeader: getObjectsByHeader({
-      condition: e => e.name === 'image',
-    })(schema),
-  };
-};
 
 const getItemList = (name: string) =>
   getGroup({
@@ -134,5 +122,6 @@ export function getBookMeta<T>({
       video: getItemMeta(schema, 'video'),
       audio: getItemMeta(schema, 'audio'),
     },
+    pages: getItemMeta(schema, 'page'),
   };
 }

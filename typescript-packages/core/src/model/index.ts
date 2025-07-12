@@ -6,3 +6,5 @@ export * from './layout';
 export * from './store';
 export * from './linkedSchema';
 export * from './iterableBook';
+export * from './mergeText';
+export * from './expandMarkers';

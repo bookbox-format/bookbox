@@ -1,7 +1,7 @@
-import { BookRawItem, FBook } from "@bookbox/preset-web";
+import { js } from "@bookbox/preset-web";
 
-export const Generator: FBook = (api) => {
-  const { header, book, code, math, item, list, area, link } = api;
+export const Generator: js.FBook = (api) => {
+  const { header, book, code, math, external, area, link, format } = api;
 
   return book`
 ${header.level(2)`Генератор`}
@@ -9,18 +9,22 @@ ${header.level(2)`Генератор`}
 Модель книги также может быть записана как есть в текстовых форматах данных, например json или yaml, если генератор отсутствует.
 
 
+Сначала будет описан нативный язык разметки Bookbox markup (bbm), но можно сделать генератор на любом языке программирования.
 Генераторы на языках программирования хороши тем, что сам язык программирования выступает как препроцессор.
+На текущий момент реализована поддержка языка javascript.
+
+${header.level(3).key('inline-bbm')`Bookbox markup`}
 
 ${header.level(3)`Javascript`}
-Для данной книги использован генератор на javascript из библиотеки ${link.href('https://www.npmjs.com/package/@bookbox/generator-js')`@bookbox/generator-js`}.
-На самом деле он написан на typescript, поэтому имеет хорошую поддержку типов.
+Для данной книги использован генератор на javascript из библиотеки ${link.href('https://www.npmjs.com/package/@bookbox/generator-js')`@bookbox/generator-js`}  (за исключением ${link.ref`inline-bbm``раздела`} про нативный язык разметки bbm).
+На самом деле генератор написан на typescript, поэтому имеет хорошую поддержку типов.
 Typescript компилируется в два вида js: CommonJS модули (для совместимости) и Ecmascript модули (предпочтительный вариант).
 
 
 Книга записывается как чистая функция, которая принимает bookbox апи в качестве аргумента, и возвращает дерево элементов книги.
 
 
-Пример: так выглядит книга раздела "Генератор" вплоть до текущей строки
+Пример: так выглядит книга начала раздела "Генератор"
 ${code.lang("typescript")`
 import type { FBook } from "@bookbox/generator-js";
 
@@ -33,19 +37,9 @@ export const Generator: FBook = api => {
 Модель книги также может быть записана как есть в текстовых форматах данных, например json или yaml, если генератор отсутствует.
 
 
+Сначала будет описан нативный язык разметки Bookbox markup (bbm), но можно сделать генератор на любом языке программирования.
 Генераторы на языках программирования хороши тем, что сам язык программирования выступает как препроцессор.
-
-
-\${header.level(3)\`Javascript\`}
-Для данной книги использован генератор на javascript.
-На самом деле он написан на typescript, поэтому имеет хорошую поддержку типов.
-Typescript компилируется в два вида js: CommonJS модули (для совместимости) и Ecmascript модули (предпочтительный вариант).
-
-
-Книга записывается как чистая функция, которая принимает bookbox апи в качестве аргумента, и возвращает дерево элементов книги.
-
-
-Пример: так выглядит книга раздела "Генератор" вплоть до текущей строки
+На текущий момент реализована поддержка языка javascript.
 \`
 `}
 
@@ -68,7 +62,7 @@ ${math`2^{17} = ${Math.pow(2, 17)}`}
 
 Операции со списками
 
-Обратите внимание, что список элементов необходимо обернуть в пустой элемент ${code`area`}
+Обратите внимание, что список элементов необходимо обернуть в пустой элемент ${code.inline()`area`}
 
 ${code.lang("javascript")`
 area.inline()(
@@ -90,25 +84,25 @@ A-Z: ${area.inline()(
 
 ${code.lang('javascript')`
 () => {
-    let leaf: BookRawItem = 'Канторова пыль';
-    let empty: BookRawItem = '';
-    const level = 2;
-    for (let i = 0; i < level; i++) {
-        leaf = list(item(leaf), item(empty), item(leaf))
-        empty = list(item(empty), item(empty), item(empty));
+    // Канторова пыль
+    let leaf = '|';
+    let empty = '.';
+    for (let i = 0; i < 5; i++) {
+        leaf = leaf + empty + leaf
+        empty = empty + empty;
     }
     return leaf;
 }
 `}
 ${(() => {
-  let leaf: BookRawItem = 'Канторова пыль';
-  let empty: BookRawItem = '';
-  const level = 2;
-  for (let i = 0; i < level; i++) {
-      leaf = list(item(leaf), item(empty), item(leaf))
-      empty = list(item(empty), item(empty), item(empty));
-  }
-  return leaf;
+    // Канторова пыль
+    let leaf = '|';
+    let empty = '.';
+    for (let i = 0; i < 5; i++) {
+        leaf = leaf + empty + leaf
+        empty = empty + empty;
+    }
+    return leaf;
 })()}
 
 
@@ -140,6 +134,33 @@ export const Internal: FBook = api => {
 \${Generator(api)}
 \`;
 };
+`}
+
+
+${header.level(4)`Маркеры начала и конца`}
+Маркеры start и end нативно поддерживаются в виде функций
+
+Пример из математической книги
+
+
+${code.lang('typescript')`
+import type { FBook } from '@bookbox/generator-js';
+
+export const Math: FBook = api => {
+    const { start, end, list, item, math } = api;
+
+    return book\`
+\${start(list)}
+\${item\`
+(рефлексивность) \${math\`x R x\`} для всех \${math\`x \\in X\`};
+\`}
+\${item\`
+(симметричность) \${math\`x R y \\rArr y R x\`} для всех \${math\`x, y \\in X\`};
+\`}
+\${item\`
+(транзитивность) \${math\`x R y\`} и \${math\`y R z \\rArr x R z\`} для всех \${math\`x, y, z \\in X\`}.
+\`}
+\${end(list)}
 `}
 
 `;

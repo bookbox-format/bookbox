@@ -1,0 +1,228 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`parse def > definitions 1`] = `
+{
+  "link": {
+    "addToStart": [Function],
+    "getElement": [Function],
+  },
+  "theorem": {
+    "addToStart": [Function],
+    "getElement": [Function],
+  },
+}
+`;
+
+exports[`parse def > newSchema 1`] = `
+[
+  {
+    "children": [],
+    "name": "counter",
+    "props": {
+      "initial": 1,
+      "start": "theorem",
+    },
+  },
+  "
+
+",
+  {
+    "children": [
+      {
+        "children": [
+          "Теорема
+",
+          {
+            "children": [],
+            "name": "counter",
+            "props": {
+              "key": "test_link",
+              "use": "theorem",
+            },
+          },
+          "
+",
+          {
+            "children": [
+              "(example)",
+            ],
+            "name": "area",
+            "props": {
+              "hidden": false,
+              "inline": true,
+            },
+          },
+          ".
+",
+        ],
+        "name": "format.b",
+        "props": {
+          "inline": true,
+          "key": "test_name",
+        },
+      },
+      "
+theorem text
+
+",
+    ],
+    "marker": undefined,
+    "name": "area",
+    "props": {
+      "key": "test",
+      "name": "example",
+    },
+  },
+  "
+
+",
+  {
+    "children": [
+      {
+        "children": [
+          "Теорема
+",
+          {
+            "children": [],
+            "name": "counter",
+            "props": {
+              "key": "test_link",
+              "use": "theorem",
+            },
+          },
+          "
+",
+          {
+            "children": [
+              "()",
+            ],
+            "name": "area",
+            "props": {
+              "hidden": true,
+              "inline": true,
+            },
+          },
+          ".
+",
+        ],
+        "name": "format.b",
+        "props": {
+          "inline": true,
+          "key": "test_name",
+        },
+      },
+      "
+without name
+
+",
+    ],
+    "marker": undefined,
+    "name": "area",
+    "props": {
+      "key": "test",
+    },
+  },
+  "
+
+",
+  {
+    "children": [
+      {
+        "children": [],
+        "name": "use",
+        "props": {
+          "ref": "test_link",
+        },
+      },
+      "
+",
+    ],
+    "marker": undefined,
+    "name": "label",
+    "props": {
+      "ref": "test",
+    },
+  },
+  "
+",
+]
+`;
+
+exports[`parse def > newSchema text 1`] = `
+"
+
+Теорема
+
+(example).
+
+theorem text
+
+
+
+Теорема
+
+().
+
+without name
+
+
+
+
+
+"
+`;
+
+exports[`parse def > schema 1`] = `
+[
+  "
+",
+  {
+    "children": [
+      "theorem text
+",
+    ],
+    "name": "def.theorem",
+    "props": {
+      "key": "test",
+      "name": "example",
+    },
+  },
+  "
+
+",
+  {
+    "children": [
+      "without name
+",
+    ],
+    "name": "def.theorem",
+    "props": {
+      "key": "test",
+    },
+  },
+  "
+
+",
+  {
+    "children": [
+      "test",
+    ],
+    "name": "def.link",
+    "props": {},
+  },
+  "
+",
+]
+`;
+
+exports[`parse def > schema text 1`] = `
+"
+theorem text
+
+
+without name
+
+
+test
+"
+`;

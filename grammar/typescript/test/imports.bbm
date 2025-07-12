@@ -1,0 +1,8 @@
+{header.level{1} imports test}
+
+{#import ./child_1.bbm}
+{#import ./child_bad_import.bbm}
+
+{area
+include {#import ./child_2.bbm}
+}

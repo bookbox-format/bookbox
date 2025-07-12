@@ -1,4 +1,4 @@
-import { BookElementSchema, BookItem, BookSchema } from "@bookbox/core";
+import { BookItem, BookSchema } from "@bookbox/core";
 import { BookApi, BookRawSchema, BookResult } from "./api";
 import { defaultBookApi } from "./defaultApi";
 
@@ -13,58 +13,45 @@ function isBookResult(x: Item<BookRawSchema>): x is BookResult {
  */
 export function getPureSchema(schema: BookRawSchema): BookSchema {
   const result: BookSchema = [];
-  const stack: BookElementSchema[] = [];
-  const getTarget = () =>
-    stack.length > 0 ? stack[stack.length - 1].children : result;
 
   for (const item of schema) {
-    // куда класть текущие элементы
-    const target = getTarget();
-
     if (typeof item === "string") {
-      target.push(item);
+      result.push(item);
     } else if (typeof item === "number") {
-      target.push(`${item}`);
+      result.push(`${item}`);
     } else if (item === null) {
-      target.push("");
+      result.push("");
     } else if (typeof item === "boolean") {
-      target.push(`${+item}`);
+      result.push(`${+item}`);
     } else if (isBookResult(item)) {
       // вложенные книги
-      target.push(...getPureSchema(item.schema));
+      result.push(...getPureSchema(item.schema));
     } else if (
       (typeof item === "object" &&
         (item as any).prototype &&
         item instanceof Proxy) ||
       typeof item === "function"
     ) {
-      target.push(...getPureSchema([(item as any)()]));
+      result.push(...getPureSchema([(item as any)()]));
     } else if ("__start" in item) {
       // текущая область
-      stack.push({
+      result.push({
         name: item.__start,
         props: item.props,
+        marker: 'start',
         children: [],
       });
     } else if ("__end" in item) {
-      const elem = stack.pop();
-
-      if (elem) {
-        const parentTarget = getTarget();
-
-        parentTarget.push(elem);
-      }
+      result.push({
+        name: item.__end,
+        props: item.props,
+        marker: 'end',
+        children: [],
+      });
     } else {
       item.children = getPureSchema(item.children) as BookItem[];
-      target.push(item as BookItem);
+      result.push(item as BookItem);
     }
-  }
-
-  // замыкаем остатки стека
-  while (stack.length > 0) {
-    const elem = stack.pop()!;
-    const target = getTarget();
-    target.push(elem);
   }
 
   return result;

@@ -1,4 +1,4 @@
-import type { FBook } from '@bookbox/preset-web';
+import type { js } from '@bookbox/preset-web';
 
 import {Model} from './model';
 import {Generator} from './generator';
@@ -6,7 +6,7 @@ import {View} from './view';
 
 const pipeline = './pipeline.svg';
 
-export const Internal: FBook = api => {
+export const Internal: js.FBook = api => {
     const { header, book, image, resource } = api;
 
     return book`
@@ -19,11 +19,7 @@ ${header.level(2)`Внутреннее устройство книги`}
 ${image.src('/pipeline.svg').alt('BookBox pipeline')`Генератор ➞ Модель ➞ Представление`}
 
 ${Model(api)}
-
-
 ${Generator(api)}
-
-
 ${View(api)}
 `;
 };

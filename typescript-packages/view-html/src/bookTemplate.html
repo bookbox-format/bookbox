@@ -14,10 +14,12 @@
       }
     </style>
     %FONT_STYLE
-    <script src="./prepare.ts" type="module"/>
+    <script src="./prepare.ts" type="module"></script>
+    
     %INLINE_HEAD
   </head>
   <body>
     %BOOK
+    <script>window.data = JSON.parse(`%SCHEMA`)</script>
   </body>
 </html>

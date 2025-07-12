@@ -1,0 +1,47 @@
+{
+  "name": "@bookbox/generator-bbm",
+  "version": "0.1.0",
+  "description": "Bookbox generator for bookbox markup language",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest",
+    "listen-deps": "onchange -d 3000 'node_modules/@bookbox/core/dist/index.js' --no-exclude -- npm run build",
+    "listen-code": "onchange -d 3000 'src/**/*' -- npm run build",
+    "dev": "npm run listen-deps & npm run listen-code"
+  },
+  "keywords": [
+    "bookbox",
+    "generator",
+    "bbm"
+  ],
+  "author": "Alexandr Nikolaichev",
+  "license": "MIT",
+  "dependenciesComment": "reorder dependencies for priority, last order will be actual",
+  "dependencies": {
+    "@bookbox/core": "^0.4.0",
+    "@bookbox/markup": "^0.5.0"
+  },
+  "devDependencies": {
+    "onchange": "^7.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.2.3"
+  }
+}

@@ -1,0 +1,84 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`check imports 1`] = `
+{
+  "blocks": [
+    {
+      "tag": {
+        "attrList": [
+          {
+            "empty": false,
+            "name": "level",
+            "value": "1",
+          },
+        ],
+        "body": {
+          "blocks": [
+            {
+              "text": "imports test",
+            },
+          ],
+        },
+        "name": "header",
+        "separator": " ",
+      },
+    },
+    {
+      "text": "
+
+",
+    },
+    {
+      "text": "TEXT",
+    },
+    {
+      "text": "
+",
+    },
+    {
+      "error": {
+        "message": "Error: ENOENT: no such file or directory, open '/Users/nikolaichev/Projects/bookbox/grammar/typescript/test/child_bad_import.bbm'",
+        "value": "the import cannot be added",
+      },
+    },
+    {
+      "text": "
+
+",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "include ",
+            },
+            {
+              "text": "TEXT_2",
+            },
+            {
+              "text": "
+",
+            },
+          ],
+        },
+        "name": "area",
+        "separator": "
+",
+      },
+    },
+  ],
+}
+`;
+
+exports[`check imports 2`] = `
+"{header.level{1} imports test}
+
+TEXT
+
+
+{area
+include TEXT_2
+}"
+`;

@@ -58,7 +58,8 @@
   --book-box-size-page-column-width: 2em;
   --book-box-size-offset-right: calc(max(var(--book-box-size-offset), var(--book-box-size-page-column-width)));
 
-  --book-box-size-page-max-width: 900px;
+  --book-box-size-content-max-width: 800px;
+  --book-box-size-page-max-width: calc(100vw - var(--book-box-size-offset) - var(--book-box-size-offset-right));
 
   --book-box-z-index-content: 10000;
   --book-box-z-index-settings: 10001;
@@ -69,8 +70,12 @@
   background-color: var(--book-box-color-background);
   position: relative;
   line-height: var(--book-box-size-text-line);
-  font-family: sans-serif;
+  font-family: var(--book-box-font, sans-serif);
   hyphens: auto;
+}
+
+.book-box:fullscreen {
+  overflow: auto;
 }
 
 .book-box_theme-dark {
@@ -110,30 +115,79 @@
   position: relative;
 }
 
+.book-box_content-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  position: relative;
+  max-width: var(--book-box-size-page-max-width);
+}
+
+.book-box_content-container > .book-box_layout-tabs {
+  position: sticky;
+  top: 0;
+  --h: var(--book-box-size-settings-height, 100vh);
+  max-height: var(--h);
+  height: var(--h);
+  width: 300px;
+  max-width: 100vw;
+  min-width: 200px;
+  border-right: 1px solid var(--book-box-color-divider);
+  background: var(--book-box-color-background);
+  overflow: auto;
+  resize: horizontal;
+  z-index: var(--book-box-z-index-settings);
+}
+
+.book-box_content-container > .book-box_layout-tabs .book-box_layout-settings-contents-item {
+  font-size: 0.7em;
+}
+
+.book-box_content-container
+  > .book-box_layout-tabs
+  .book-box_layout-settings-contents-item
+  :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0.1em;
+}
+
+@media (max-width: 1200px) {
+  .book-box_content-container {
+    grid-template-columns: 1fr;
+  }
+  .book-box_content-container > .book-box_layout-tabs {
+    border-top: 1px solid var(--book-box-color-divider);
+    border-top-right-radius: 8px;
+    position: fixed;
+    margin-top: 3rem;
+    --sh: calc(var(--h) - 3rem);
+    max-height: var(--sh);
+    height: var(--h);
+  }
+}
+
 /* Settings */
 
 .book-box_layout-settings {
   position: fixed;
   bottom: 0;
-  right: 0;
+  left: 0;
   z-index: var(--book-box-z-index-settings);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin: 1rem;
+  margin: 0.5rem;
 }
 
 .book-box_layout-settings-item {
   display: block;
-  padding: 8px;
+  padding: 4px;
   background-color: var(--book-box-color-background-accent);
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
-  width: 2rem;
-  height: 2rem;
-  line-height: 2rem;
-  font-size: 2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  line-height: 1.2rem;
+  font-size: 1.4rem;
 }
 
 .book-box_layout-settings-panel .book-box_layout-panel-header {
@@ -197,8 +251,15 @@
   grid-template-columns: repeat(auto-fit, 100px);
 }
 
-.book-box_layout-settings-media .book-box-image .book-box_media-figure-caption {
-  display: none;
+.book-box_layout-settings-media-item {
+  overflow: hidden;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.book-box_layout-settings-media-item:hover {
+  background-color: var(--book-box-color-background-hover);
+  cursor: pointer;
 }
 
 /* End: Media */
@@ -335,6 +396,7 @@
 /* Tabs */
 
 .book-box_layout-tabs {
+  background: var(--book-box-color-background);
   display: flex;
   flex-wrap: wrap;
   position: relative;
@@ -362,10 +424,11 @@
 }
 
 .book-box_layout-tabs > div {
-  opacity: 0.5;
+  opacity: 0;
+  display: none;
   left: 0;
   position: absolute;
-  top: 0;
+  top: 2.5rem;
   width: 100%;
   z-index: -1;
 }
@@ -380,7 +443,7 @@
 .book-box_layout-tabs > input:checked:nth-of-type(8) ~ div:nth-of-type(8),
 .book-box_layout-tabs > input:checked:nth-of-type(9) ~ div:nth-of-type(9),
 .book-box_layout-tabs > input:checked:nth-of-type(10) ~ div:nth-of-type(10) {
-  position: relative;
+  display: block;
   opacity: 1;
   z-index: 1;
   border-top: 1px solid var(--book-box-color-divider);
@@ -395,32 +458,50 @@
   top: 0;
   right: 0;
   z-index: var(--book-box-z-index-settings-view);
-  margin: 1rem;
+  margin: 0.5rem;
 }
 
 .book-box_layout-settings-view-tumbler {
   display: none;
 }
 
-.book-box_layout-settings-view-tumbler:checked + label::after {
-  content: '⤦';
-}
-
-.book-box_layout-settings-view-tumbler:not(:checked) + label::after {
+.book-box_layout-settings-view-tumbler + label::after {
   content: '⤢';
 }
 
-.book-box_layout-settings-view-tumbler:checked + label + div + .book-box_content {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  overflow: auto;
-  z-index: var(--book-box-z-index-content);
+.book-box:fullscreen .book-box_layout-settings-view-tumbler + label::after{
+  content: '⤦';
 }
 
 /* End: Settings view */
+
+/* Settings settings */
+
+.book-box_layout-settings-settings {
+  position: sticky;
+  top: 0.5rem;
+  left: 0;
+  z-index: var(--book-box-z-index-settings-view);
+  margin: 0.5rem;
+}
+
+.book-box_layout-settings-settings::after {
+  content: '⚙';
+}
+
+.book-box_layout-settings-settings-tumbler:checked + div .book-box_layout-settings-settings::after {
+  content: '«';
+}
+
+.book-box_layout-settings-settings-tumbler:not(:checked) + .book-box_content-container {
+  grid-template-columns: 1fr;
+}
+
+.book-box_layout-settings-settings-tumbler:not(:checked) + div > .book-box_layout-tabs {
+  display: none;
+}
+
+/* End: Settings settings */
 
 /* Content */
 
@@ -432,7 +513,7 @@
 
 .book-box_content > div {
   position: relative;
-  max-width: var(--book-box-size-page-max-width);
+  max-width: calc(min(var(--book-box-size-content-max-width), var(--book-box-size-page-max-width)));
   padding: 16px var(--book-box-size-offset);
   padding-right: var(--book-box-size-offset-right);
   margin: auto;
@@ -574,6 +655,12 @@
   display: block;
 }
 
+.book-box_loadable {
+  background: var(--book-box-color-background-hover);
+  padding: 8px;
+  border-radius: 8px;
+}
+
 .book-box_layout-offline .book-box_loadable {
   box-shadow: 5px 5px gray;
 }
@@ -627,9 +714,9 @@
 
 .book-box-header-mark {
   display: inline-block;
-  min-height: 1.5rem;
-  max-height: 4rem;
-  font-size: 1.2rem;
+  min-height: 1rem;
+  max-height: 2rem;
+  font-size: 1rem;
   line-height: 1em;
   font-weight: normal;
   padding: 4px;

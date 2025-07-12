@@ -1,7 +1,7 @@
 import { HtmlToken } from "./model";
 import hljs from 'highlight.js';
 
-interface CodeOptions {
+export interface CodeOptions {
   text: string;
   lang?: string;
 }
