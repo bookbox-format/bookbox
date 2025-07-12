@@ -4,33 +4,31 @@ const contentsSelector = '.book-box_layout-settings-contents';
 const currentHeaderClass = 'book-box_layout-settings-contents-item-current';
 const currentHeaderSelector = `.${currentHeaderClass}`;
 
-const getHeadersNavigationCallback =
-  (listHeaders: HTMLElement[], listHeadersMap: Map<string, number>, current: CurrentNavigationData) =>
-  (entries: IntersectionObserverEntry[]) => {
-    const headersElem = document.querySelector(contentsSelector) as HTMLElement;
-    if (!headersElem) {
-      return;
-    }
+const getHeadersNavigationCallback = (current: CurrentNavigationData) => (entries: IntersectionObserverEntry[]) => {
+  const headersElems = document.querySelectorAll(contentsSelector);
+
+  headersElems.forEach(headersElem => {
+    const listHeaders = Array.from(headersElem.querySelectorAll('[data-name="header"]')) as HTMLElement[];
+    const listParentHeaders = listHeaders.map(e => e.parentElement!);
+
+    const listHeadersMap = new Map(listHeaders.map((elem, i) => [elem.dataset.key!, i]));
     const { targetIndex } = getCurrentItemIndex({
       listMap: listHeadersMap,
       current,
       entries,
     });
 
-    if (targetIndex === current.index) {
-      return;
-    }
-
-    const targetElem = listHeaders[targetIndex];
+    const targetElem = listParentHeaders[targetIndex];
     // возможно заменить на прямой индекс
-    const currentElem = headersElem.querySelector(currentHeaderSelector);
-    if (currentElem) {
+    const currentElems = headersElem.querySelectorAll(currentHeaderSelector);
+    currentElems.forEach(currentElem => {
       currentElem.classList.remove(currentHeaderClass);
-    }
+    });
     targetElem.classList.add(currentHeaderClass);
     targetElem.parentElement!.scrollTop = targetElem.offsetTop - 50;
     current.index = targetIndex;
-  };
+  });
+};
 
 const getPagesNavigationCallback =
   (listPagesMap: Map<string, number>, current: CurrentNavigationData) => (entries: IntersectionObserverEntry[]) => {
@@ -143,24 +141,15 @@ export function getCurrentPage() {
   return Number.isNaN(page) ? null : page;
 }
 
+// headers navigation
 export function getNavigation(bookHtmlContainer: Element = document.body) {
-  // headers navigation
-
   const contentHeaders = bookHtmlContainer.querySelectorAll('.book-box_content [data-name="header"]');
-  const listHeaders = Array.from(
-    bookHtmlContainer.querySelectorAll('.book-box_layout-settings-contents [data-name="header"]'),
-  ) as HTMLElement[];
 
-  const listHeadersMap = new Map(listHeaders.map((elem, i) => [elem.dataset.key!, i]));
   const headersCurrent: CurrentNavigationData = {
     index: null,
     visible: new Set<number>(),
   };
-  const headersNavigationCallback = getHeadersNavigationCallback(
-    listHeaders.map(e => e.parentElement!),
-    listHeadersMap,
-    headersCurrent,
-  );
+  const headersNavigationCallback = getHeadersNavigationCallback(headersCurrent);
   const headersObserver = new IntersectionObserver(headersNavigationCallback, {
     threshold: 0.5,
   });

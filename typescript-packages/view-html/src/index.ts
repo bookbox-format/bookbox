@@ -10,3 +10,4 @@ export * from './utils';
 export * as css from './dynamicCss';
 export * from './init';
 export * from './render';
+export * from './theme';

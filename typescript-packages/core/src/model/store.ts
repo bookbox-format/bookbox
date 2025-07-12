@@ -16,15 +16,23 @@ export function getStore<T>({
     dataByKeys: {},
     elementsByKeys: getElementsByKeys(schema),
   };
-  for (const [key, elem] of Object.entries(result.elementsByKeys)) {
-    // FIXME: поздние ключи могут использовать более ранние, но не наоборот
-    result.dataByKeys[key] = builder({
-      schema: [elem],
+  const writeDataByKey = (key: string) =>
+    (result.dataByKeys[key] = builder({
+      schema: [result.elementsByKeys[key]],
       store: result,
       externalBuilder,
       build: getBuild(result),
-    });
+    }));
+  const keys = Object.keys(result.elementsByKeys);
+  for (let g = 0; g < 2; g++) {
+    for (let i = 0; i < keys.length; i++) {
+      writeDataByKey(keys[i]);
+    }
+    for (let i = keys.length - 1; i >= 0; i--) {
+      writeDataByKey(keys[i]);
+    }
   }
+
   return result;
 }
 

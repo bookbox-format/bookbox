@@ -1,0 +1,384 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`correct parsing 1`] = `
+{
+  "blocks": [
+    {
+      "text": "For example, let's write the text from ",
+    },
+    {
+      "tag": {
+        "attrList": [
+          {
+            "empty": false,
+            "name": "href",
+            "value": "https://ytsaurus.tech/docs/en/user-guide/dynamic-tables/dyn-query-language#accessing-containers",
+          },
+        ],
+        "body": {
+          "blocks": [
+            {
+              "text": "the documentation YTsaurus",
+            },
+          ],
+        },
+        "name": "a",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " as of 10.07.2024.
+
+",
+    },
+    {
+      "tag": {
+        "attrList": [
+          {
+            "empty": false,
+            "name": "level",
+            "value": "4",
+          },
+        ],
+        "body": {
+          "blocks": [
+            {
+              "text": "Accessing containers",
+            },
+          ],
+        },
+        "name": "header",
+        "separator": " ",
+      },
+    },
+    {
+      "text": "
+
+If a table column has the ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "Composite",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " data type, you can use the following syntax to access that column's fields:
+- To access ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "struct",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " fields, use a dot.
+- To access ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "tuple",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " fields, use a dot. Indexing is ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "zero-based",
+            },
+          ],
+        },
+        "name": "b",
+        "separator": " ",
+      },
+    },
+    {
+      "text": ".
+- To access ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "dict",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " fields, use square brackets.
+- To access ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "list",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " fields, use square brackets. Indexing is ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "zero-based",
+            },
+          ],
+        },
+        "name": "b",
+        "separator": " ",
+      },
+    },
+    {
+      "text": ".
+
+The correctness of accessing struct and tuple fields is checked ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "before starting",
+            },
+          ],
+        },
+        "name": "b",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " the query's execution. The correctness of accessing map and list fields is checked ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "during",
+            },
+          ],
+        },
+        "name": "b",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " the query's execution.
+
+To enable this syntax, make sure to set ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "syntax_version=2",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": " ",
+      },
+    },
+    {
+      "text": " in the query parameters. Starting with this version of the syntax, strings are escaped with ",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "backticks",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": " ",
+      },
+    },
+    {
+      "text": ".
+
+To access containers, you need to specify the full column name, including the table alias.
+
+",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [],
+        },
+        "name": "separator",
+        "separator": "",
+      },
+    },
+    {
+      "text": "
+",
+    },
+    {
+      "include": {
+        "value": "text",
+      },
+    },
+    {
+      "text": "
+",
+    },
+    {
+      "tag": {
+        "attrList": [],
+        "body": {
+          "blocks": [
+            {
+              "text": "pre text",
+            },
+          ],
+        },
+        "name": "format:pre",
+        "separator": " ",
+      },
+    },
+    {
+      "text": "
+
+Usage examples:
+",
+    },
+    {
+      "tag": {
+        "attrList": [
+          {
+            "empty": true,
+            "name": "block",
+            "value": "",
+          },
+          {
+            "empty": false,
+            "name": "lang",
+            "value": "sql",
+          },
+        ],
+        "body": {
+          "blocks": [
+            {
+              "text": "t.struct.member,
+t.tuple.0,
+t.dict["key"],
+t.list[1+1]
+from \`//tmp/test\` as t;
+",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": "
+",
+      },
+    },
+    {
+      "text": "
+
+",
+    },
+    {
+      "tag": {
+        "attrList": [
+          {
+            "empty": true,
+            "name": "block",
+            "value": "",
+          },
+          {
+            "empty": false,
+            "name": "lang",
+            "value": "bash",
+          },
+        ],
+        "body": {
+          "blocks": [
+            {
+              "text": "$ yt create table '//tmp/test' --attributes '\\{dynamic=true; schema=<"unique_keys"=%true;"strict"=%true;>[\\{name=a;sort_order=ascending;type=int64;\\};\\{name=b;type_v3=\\{type_name=struct;members=[\\{name=c;type=\\{type_name=list;item=int64\\}\\}]\\}\\}]\\}'
+$ yt mount-table --path '//tmp/test'
+$ echo '\\{a=0;b=\\{c=[]\\}\\}' | yt insert-rows --table '//tmp/test' --format yson
+$ echo '\\{a=1;b=\\{c=[1;2;3]\\}\\}' | yt insert-rows --table '//tmp/test' --format yson
+$ echo '\\{a=2;b=\\{c=[4]\\}\\}' | yt insert-rows --table '//tmp/test' --format yson
+
+$ yt select-rows 't.b.c from \`//tmp/test\` as t' --syntax-version 2 --format json
+\\{"t.b.c":[]\\}
+\\{"t.b.c":[1,2,3]\\}
+\\{"t.b.c":[4]\\}
+
+$ yt select-rows 't.b.c[0] from \`//tmp/test\` as t' --syntax-version 2 --format json
+\\{"t.b.c[0]":null\\}
+\\{"t.b.c[0]":1\\}
+\\{"t.b.c[0]":4\\}
+",
+            },
+          ],
+        },
+        "name": "code",
+        "separator": "
+",
+      },
+    },
+    {
+      "text": "
+",
+    },
+  ],
+}
+`;

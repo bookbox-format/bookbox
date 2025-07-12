@@ -16,6 +16,7 @@ To access containers, you need to specify the full column name, including the ta
 
 {separator}
 {{text}}
+{format:pre pre text}
 
 Usage examples:
 {code.block.lang{sql}

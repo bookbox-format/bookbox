@@ -1,6 +1,12 @@
 import { BookHeader, BookItemMeta, BookStore, rootBookHeader } from '@bookbox/core';
 
-import { BookBoxHtmlGenerateParams, BookBoxHtmlParams, HtmlToken, listToHtml } from './model';
+import { BookBoxHtmlGenerateParams, BookBoxHtmlParams, BookBoxNavigationItem, HtmlToken, listToHtml } from './model';
+
+const SETTINGS_ICONS = {
+  contents: '📚',
+  media: '🖼',
+  design: '🛠',
+};
 
 export function getBookBoxHtmlSettings({
   bookData,
@@ -8,82 +14,149 @@ export function getBookBoxHtmlSettings({
   layoutOptions,
 }: BookBoxHtmlGenerateParams): HtmlToken {
   const { tokens, meta, store } = bookData;
-  const { viewTumbler = true, design = true, media = true, contents = true } = settingsOptions ?? {};
+
+  const { viewTumbler = true, viewItems = true, design = true, media = true, contents = true, custom = {} } = settingsOptions ?? {};
   const { fullPage = false } = layoutOptions ?? {};
   const viewId = `settings-view`;
+  const settingsId = `settings-settings`;
   return `
   <input type="checkbox" id="${viewId}" style="display: none;" class="book-box_layout-settings-view-tumbler" value="1" ${
     fullPage ? 'checked' : ''
   }/>
     <label for="${viewId}" class="book-box_layout-settings-item book-box_layout-settings-view" ${
     viewTumbler ? '' : `style="display:none"`
-  }></label>
-    <div class="book-box_layout-settings">
-      ${design ? getBookBoxHtmlSettingsDesign({ bookData }) : ''}
-      ${media ? getBookBoxHtmlSettingsMedia({ bookData }) : ''}
-      ${contents ? getBookBoxHtmlSettingsContents({ bookData }) : ''}
-    </div>
-    `;
+  } onclick="let p = bbx.getCurrentPage() || 0; (document.fullscreenElement && document.exitFullscreen ? document.exitFullscreen() : document.querySelector('.book-box').requestFullscreen()).then(() => bbx.gotoKey('page-' + p))"></label>
+  <input type="checkbox" id="${settingsId}" style="display: none;" class="book-box_layout-settings-settings-tumbler" value="1" />`;
+}
+
+export function getBookBoxHtmlSettingsTabs({ bookData, settingsOptions }: BookBoxHtmlGenerateParams) {
+  const getContent = (name: string, body: string) =>
+    `<div class="book-box_layout-settings-namespace book-box_layout-settings-${name}"">${body}</div>`;
+  const { custom = {}, design = true, media = true, contents = true } = settingsOptions ?? {};
+  const tabs = getTabs(
+    [
+      ...(contents
+        ? [
+            {
+              tab: SETTINGS_ICONS.contents,
+              content: getContent('contents', getBookBoxHtmlSettingsContentsContent({ bookData })),
+            },
+          ]
+        : []),
+      ...(media
+        ? [
+            {
+              tab: SETTINGS_ICONS.media,
+              content: getContent('media', getBookBoxHtmlSettingsMediaContent({ bookData }, 'settings-tabs_')),
+            },
+          ]
+        : []),
+      ...(design
+        ? [
+            {
+              tab: SETTINGS_ICONS.design,
+              content: getContent('design', getBookBoxHtmlSettingsDesignContent({ bookData })),
+            },
+          ]
+        : []),
+      ...Object.keys(custom).map(settingsNamespace => {
+        const { icon, getItems } = custom[settingsNamespace];
+        const items = getItems({ bookData });
+        return {
+          tab: icon,
+          content: listToHtml(items.map(item => getBookBoxHtmlNavigationItem({ ...item, settingsNamespace }))),
+        };
+      }),
+    ],
+    'settings-tabs',
+  );
+
+  return tabs;
+}
+
+export function getBookBoxHtmlSettingsDesignContent({ bookData }: BookBoxHtmlParams): HtmlToken {
+  const getThemeItem = (theme: string, color: string, name: string) => `
+<div
+  onclick="bbx.setTheme({theme: '${theme}'})"
+  class="book-box_layout-settings-design-theme"
+>
+  <div style="background: ${color}"></div>
+  ${name}
+</div>`;
+
+  const content = `<div style="padding: 0 8px">
+  <h2>Theme</h2>
+  <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+  ${getThemeItem('light', 'white', 'Light')}
+  ${getThemeItem('dark', 'var(--book-box-color-label-dark)', 'Dark')}
+  ${getThemeItem('sepia', 'var(--book-box-color-label-sepia)', 'Sepia')}
+  </div>
+</div>`;
+  return content;
 }
 
 export function getBookBoxHtmlSettingsDesign({ bookData }: BookBoxHtmlParams): HtmlToken {
-  const { tokens, meta, store } = bookData;
-  const { contents } = meta;
-  const content = `<div>
-  <h2>Theme</h2>
-  <div style="display: flex; gap: 16px">
-  <div onclick="document.querySelector('.book-box').classList.remove('book-box_theme-dark');document.querySelector('.book-box').classList.remove('book-box_theme-sepia');localStorage.setItem('book-box-theme', 'light')" class="book-box_layout-settings-design-theme"><div style="background: white"></div>Light</div>
-  <div onclick="document.querySelector('.book-box').classList.add('book-box_theme-dark');document.querySelector('.book-box').classList.remove('book-box_theme-sepia');localStorage.setItem('book-box-theme', 'dark')" class="book-box_layout-settings-design-theme"><div style="background: var(--book-box-color-label-dark)"></div>Dark</div>
-  <div onclick="document.querySelector('.book-box').classList.add('book-box_theme-sepia');document.querySelector('.book-box').classList.remove('book-box_theme-dark');localStorage.setItem('book-box-theme', 'sepia')" class="book-box_layout-settings-design-theme"><div style="background: var(--book-box-color-label-sepia)"></div>Sepia</div>
-  </div>
-  </div>`;
-  const panel = getPanel({
-    prefix: 'settings-design',
-    tumbler: { content: '🛠', classes: ['book-box_layout-settings-item'] },
-    panel: {
-      content,
-      name: 'Settings',
-      classes: ['book-box_layout-settings-panel'],
-    },
-    fast: true,
+  return getNavigationPanel({
+    settingsNamespace: 'design',
+    icon: SETTINGS_ICONS.design,
+    content: getBookBoxHtmlSettingsDesignContent({ bookData }),
   });
-  return `<div class="book-box_layout-settings-design">
-        ${panel}
-    </div>`;
 }
 
-function getBookBoxHtmlContentHeader(item: BookHeader<HtmlToken>): HtmlToken {
-  const { value, level, key } = item;
+interface GetBookBoxHtmlNavigationItemParams {
+  settingsNamespace: string;
+}
+
+function getBookBoxHtmlNavigationItem(params: GetBookBoxHtmlNavigationItemParams & BookBoxNavigationItem) {
+  const { settingsNamespace, key, value, level = 1 } = params;
   const offset = Math.max(level, 1);
   const offsetCss = `${offset * 2}ch`;
   return `<div
-        class="book-box_layout-settings-contents-item"
+        class="book-box_layout-settings-navigation_item book-box_layout-settings-${settingsNamespace}-item"
         style="padding-left: ${offsetCss};"
         data-level="${level}"
         data-ref-key="${key}"
-        onclick="gotoKey('${key}')"
+        onclick="bbx.gotoKey('${key}')"
     >
         ${listToHtml(value)}
     </div>`;
 }
 
-export function getBookBoxHtmlSettingsContents({ bookData }: BookBoxHtmlParams): HtmlToken {
-  const { tokens, meta, store } = bookData;
-  const { contents } = meta;
-  const content = listToHtml(contents.map(getBookBoxHtmlContentHeader));
+function getBookBoxHtmlContentHeader(item: BookHeader<HtmlToken>): HtmlToken {
+  const { value, level, key } = item;
+  return getBookBoxHtmlNavigationItem({ settingsNamespace: 'contents', key, value, level });
+}
+
+function getNavigationPanel(params: { settingsNamespace: string; icon: HtmlToken; content: HtmlToken }) {
+  const { settingsNamespace, icon, content } = params;
+
   const panel = getPanel({
-    prefix: 'settings-contents',
-    tumbler: { content: '📚', classes: ['book-box_layout-settings-item'] },
+    prefix: `settings-${settingsNamespace}`,
+    tumbler: { content: icon, classes: ['book-box_layout-settings-item'] },
     panel: {
       content,
-      name: 'Contents',
+      name: settingsNamespace[0].toUpperCase() + settingsNamespace.slice(1),
       classes: ['book-box_layout-settings-panel'],
     },
     fast: true,
   });
-  return `<div class="book-box_layout-settings-contents">
+
+  return `<div class="book-box_layout-settings-namespace book-box_layout-settings-${settingsNamespace}">
         ${panel}
     </div>`;
+}
+
+export function getBookBoxHtmlSettingsContentsContent({ bookData }: BookBoxHtmlParams): HtmlToken {
+  const { tokens, meta, store } = bookData;
+  const { contents } = meta;
+  const content = listToHtml(contents.map(getBookBoxHtmlContentHeader));
+  return content;
+}
+
+export function getBookBoxHtmlSettingsContents({ bookData }: BookBoxHtmlParams): HtmlToken {
+  const content = getBookBoxHtmlSettingsContentsContent({ bookData });
+
+  return getNavigationPanel({ content, icon: SETTINGS_ICONS.contents, settingsNamespace: 'contents' });
 }
 
 function bookBoxHtmlSettingsMediaBlockGetter(
@@ -101,7 +174,8 @@ function bookBoxHtmlSettingsMediaBlockGetter(
       .map(imgKey => [imgKey, store.dataByKeys[imgKey]] as const)
       .filter(e => Boolean(e[1]))
       .map(
-        ([key, imgHtml]) => `<div style="overflow: hidden;" onclick="gotoKey('${key}')">${listToHtml(imgHtml)}</div>`,
+        ([key, imgHtml]) =>
+          `<div class="book-box_layout-settings-media-item" onclick="bbx.gotoKey('${key}')"><div>${listToHtml(imgHtml)}</div><div>→</div></div>`,
       );
 
     if (mediaValues.length === 0) {
@@ -116,14 +190,14 @@ function bookBoxHtmlSettingsMediaBlockGetter(
   };
 }
 
-export function getBookBoxHtmlSettingsMedia({ bookData }: BookBoxHtmlParams): HtmlToken {
+export function getBookBoxHtmlSettingsMediaContent({ bookData }: BookBoxHtmlParams, prefix = ''): HtmlToken {
   const { meta, store } = bookData;
   const { contents, media } = meta;
   const mediaId = `panel-media`;
   const getImages = bookBoxHtmlSettingsMediaBlockGetter(media.image, store, 'grid');
   const getAudio = bookBoxHtmlSettingsMediaBlockGetter(media.audio, store, 'list');
-
   const getVideo = bookBoxHtmlSettingsMediaBlockGetter(media.video, store, 'list');
+
   const headers = [rootBookHeader, ...contents];
 
   const imgContent = listToHtml(headers.map(getImages));
@@ -135,20 +209,18 @@ export function getBookBoxHtmlSettingsMedia({ bookData }: BookBoxHtmlParams): Ht
       { tab: 'video', content: videoContent },
       { tab: 'audio', content: audioContent },
     ].filter(e => e.content !== ''),
-    'layout-media',
+    prefix + 'layout-media',
   );
-  const panel = getPanel({
-    prefix: 'settings-media',
-    tumbler: { content: '🖼', classes: ['book-box_layout-settings-item'] },
-    panel: {
-      content: tabs,
-      name: `Media`,
-      classes: ['book-box_layout-settings-panel'],
-    },
+
+  return tabs;
+}
+
+export function getBookBoxHtmlSettingsMedia({ bookData }: BookBoxHtmlParams): HtmlToken {
+  return getNavigationPanel({
+    settingsNamespace: 'media',
+    icon: SETTINGS_ICONS.media,
+    content: getBookBoxHtmlSettingsMediaContent({ bookData }),
   });
-  return `<div class="book-box_layout-settings-media">
-        ${panel}
-    </div>`;
 }
 
 type HtmlBlock = { content: HtmlToken; classes?: string[] };

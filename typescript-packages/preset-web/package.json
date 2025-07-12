@@ -1,6 +1,6 @@
 {
   "name": "@bookbox/preset-web",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Bookbox web preset",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",
@@ -17,7 +17,9 @@
   "scripts": {
     "build-cjs": "tsc -p tsconfig-publish-cjs.json",
     "build-esm": "tsc -p tsconfig-publish-esm.json",
-    "build": "npm run build-cjs; npm run build-esm"
+    "build": "npm run build-cjs; npm run build-esm",
+    "listen-deps": "onchange -d 3000 'node_modules/@bookbox/core/dist/index.js' 'node_modules/@bookbox/generator-js/build/esm/index.js' 'node_modules/@bookbox/view-html/build/esm/index.js' --no-exclude -- npm run build",
+    "listen-code": "onchange -d 3000 'src/**/*' -- npm run build"
   },
   "keywords": [
     "bookbox"
@@ -25,11 +27,14 @@
   "author": "Alexandr Nikolaichev",
   "license": "MIT",
   "dependencies": {
-    "@bookbox/core": "^0.3.0",
-    "@bookbox/generator-js": "^0.2.0",
-    "@bookbox/view-html": "^0.3.0"
+    "@bookbox/core": "^0.4.0",
+    "@bookbox/generator-js": "^0.3.0",
+    "@bookbox/generator-bbm": "^0.1.0",
+    "@bookbox/view-html": "^0.5.0",
+    "@bookbox/markup": "^0.5.0"
   },
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "onchange": "^7.1.0",
+    "typescript": "^5.8.3"
   }
 }

@@ -1,6 +1,6 @@
-import type { FBook } from '@bookbox/preset-web';
+import type { js } from '@bookbox/preset-web';
 
-export const View: FBook = api => {
+export const View: js.FBook = api => {
     const { header, book, link, code } = api;
 
     return book`
@@ -64,8 +64,8 @@ writeFileSync(
   getBookBoxHtmlDocument({
     bookData,
     inlineHead: \`
-<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({ startOnLoad: true });</script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script async >mermaid.initialize({ startOnLoad: true });</script>
 \`,
   })
 );

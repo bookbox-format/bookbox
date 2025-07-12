@@ -48,7 +48,7 @@ export function calculateCounters(
       continue;
     }
     if (item.name !== 'counter') {
-      calculateCounters(item.children, counters, steps);
+      calculateCounters(item.children, counters, steps, bumped);
       continue;
     }
     const props = item.props as BookElements['counter']['props'];

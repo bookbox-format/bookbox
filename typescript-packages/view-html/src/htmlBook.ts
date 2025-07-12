@@ -12,9 +12,13 @@ import { getPanel } from './htmlBookSettings';
 import { getCssSizeStyle, getLayoutParams, parseSize } from './layout';
 import { HtmlToken, listToHtml } from './model';
 import { renderFormula } from './math';
-import { renderColorCode } from './code';
+import { CodeOptions, renderColorCode } from './code';
 
-const htmlElements: BookBuilderParams<HtmlToken>['elements'] = {
+export type UseHtmlElementsParams = {
+  renderColorCode(options: CodeOptions): HtmlToken;
+};
+
+export const useHtmlElements: (params: UseHtmlElementsParams) => BookBuilderParams<HtmlToken>['elements'] = params => ({
   title:
     ({ key }) =>
     ({ children }) => {
@@ -185,7 +189,7 @@ const htmlElements: BookBuilderParams<HtmlToken>['elements'] = {
       const langAttribute = lang ? `data-code-language="${lang}"` : '';
       const langMark = lang ? `<div class="book-box-code-lang-mark">${lang}</div>` : '';
       const rawChildren = store.elementsByKeys[key ?? ''].children;
-      const colorCodeHtml = renderColorCode({ text: rawChildren.join(''), lang });
+      const colorCodeHtml = params.renderColorCode({ text: rawChildren.join(''), lang });
       const codeHtml = `<div style="width: 100%">${langMark}<pre><code ${langAttribute}>${colorCodeHtml}</code></pre></div>`;
       const content = position === 'full' ? codeHtml : getFigure(codeHtml, '');
       return `<div class="book-box-code ${
@@ -208,11 +212,11 @@ const htmlElements: BookBuilderParams<HtmlToken>['elements'] = {
         panel: {
           content: `<div class="book-box-label-panel-content">
           ${listToHtml(data)}
-            <div class="book-box-label-panel-goto" onclick="gotoKey('${ref}')">→</div>
+            <div class="book-box-label-panel-goto" onclick="bbx.gotoKey('${ref}')">→</div>
             </div>`,
           classes: ['book-box-label-data'],
           name: `<div class="book-box-label-panel-header">label: <div class="book-box-label-panel-mark">${childrenHtml}</div>
-          <div class="book-box-label-panel-goto" onclick="gotoKey('${key}')">→</div></div>`,
+          <div class="book-box-label-panel-goto" onclick="bbx.gotoKey('${key}')">→</div></div>`,
         },
       });
       return `<div class="book-box-label" data-key="${key}" data-name="label" data-ref="${ref}" data-layout="top">${panel}</div>`;
@@ -249,7 +253,7 @@ const htmlElements: BookBuilderParams<HtmlToken>['elements'] = {
       const childrenHtml = listToHtml(content);
       return href
         ? `<a class="book-box-link book-box_clickable" href="${href}" data-key="${key}" data-name="link">${childrenHtml}</a>`
-        : `<span class="book-box-link book-box_clickable" data-key="${key}" data-name="link" onclick="gotoKey('${ref}')" data-layout="top">${childrenHtml}</span>`;
+        : `<span class="book-box-link book-box_clickable" data-key="${key}" data-name="link" onclick="bbx.gotoKey('${ref}')" data-layout="top">${childrenHtml}</span>`;
     },
   image:
     ({ src = '/~~non-exist.png', alt, position = 'center', height = 1, width = 1, block, inline, key }) =>
@@ -357,10 +361,14 @@ const htmlElements: BookBuilderParams<HtmlToken>['elements'] = {
     },
   area:
     ({ key, inline = false, meta }) =>
-    ({ children }) =>
-      `<div class="book-box-area ${
+    ({ children }) => {
+      const content = listToHtml(children);
+      const startSpace = content.startsWith(' ') ? ' ' : '';
+      const endSpace = content.endsWith(' ') ? ' ' : '';
+      return `${startSpace}<div class="book-box-area ${
         inline ? 'book-box-area-inline' : ''
-      }" data-name="area" data-key="${key}" data-layout="top">${listToHtml(children)}</div>`,
+      }" data-name="area" data-key="${key}" data-layout="top">${content}</div>${endSpace}`;
+    },
   item:
     ({ key }) =>
     ({ children }) =>
@@ -466,13 +474,16 @@ const htmlElements: BookBuilderParams<HtmlToken>['elements'] = {
       return `<${elem} data-key="${key}" data-name="cell" data-layout="top" class="book-box_align-${align}">${childrenHtml}</${elem}>`;
     },
   resource: () => () => '',
-};
+});
 
 export const htmlSynteticElements: BookBuilderParams<HtmlToken>['synteticElements'] = {
   text:
     ({ raw = '' }) =>
-    () =>
-      `${parseNewLines('<br/>')(raw.replace(/</g, '&lt;').replace(/>/g, '&gt;')).join('')}`,
+    () => {
+      if (raw === '\n') return raw;
+      const text = `${parseNewLines('<br/>')(raw.replace(/</g, '&lt;').replace(/>/g, '&gt;')).join('')}`;
+      return text;
+    },
   page:
     ({ count, key }) =>
     ({ children }) =>
@@ -504,7 +515,7 @@ export const htmlSynteticElements: BookBuilderParams<HtmlToken>['synteticElement
 };
 
 const htmlBuilder: BookBuilderParams<HtmlToken> = {
-  elements: htmlElements,
+  elements: useHtmlElements({ renderColorCode }),
   synteticElements: htmlSynteticElements,
 };
 
@@ -542,7 +553,7 @@ function getIframe({
   });
   const loadableId = `${id}-loadable`;
   const altText = alt ?? `${type} <a href="${src}" class="book-box-link book-box_clickable">${src}</a>`;
-  return `<div style="width: 100%; height:100%; ${sizeBlockStyle}" class="book-box_loadable" id="${loadableId}">
+  return `<div style="width: 100%; height:100%; ${sizeBlockStyle}" class="book-box_loadable book-box_loadable-loaded" id="${loadableId}">
     <iframe
         style="width: 100vw; height:100vh; ${sizeBlockStyle}"
         src=${src}

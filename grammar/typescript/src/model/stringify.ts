@@ -17,6 +17,7 @@ export function stringify(body: Body): string {
         const tagBody = body ? stringify(body) : '';
         return `{${name}${attrs}${separator}${tagBody}}`;
       }
+      return '';
     })
     .join('');
 }

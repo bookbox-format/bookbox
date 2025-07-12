@@ -1,4 +1,4 @@
-import type { FBook } from '@bookbox/preset-web';
+import type { js } from '@bookbox/preset-web';
 
 import {Properties} from './properties';
 
@@ -6,7 +6,7 @@ const lenin = './lenin.ogg';
 const metro = './metro-msk-geography-2030.png';
 const more = './v-sinem-more.mp4';
 
-export const Model: FBook = api => {
+export const Model: js.FBook = api => {
     const {
         header,
         book,
@@ -71,6 +71,23 @@ ${area.key('break-lines')`
 ${header.level(3)`Элементы`}
 Помимо текста, в книге есть различные элементы — семантические, для форматирования текста, для медиа (картинки, видео) и т.д.
 Каждый элемент имеет имя, список атрибутов (может быть пустым) и содержимое из текста и других элементов.
+Элементы могут дополнительно иметь маркеры начала или конца (start/end), на случай, если начало элемента слишком далеко от его конца (длинные списки, таблицы, ...).
+
+
+Список атрибутов, которые могут быть у любого элемента:
+${start(list)}
+${start(item)}
+${em`key`} — уникальный ключ в пределах книги. Eсли не указать, будет проставлен по умолчанию
+${end(item)}
+${start(item)}
+${em`meta`} — метаинформация, в формате ${label.ref`type-Record``Record<string>`}. По умолчанию не заполняется
+${end(item)}
+${start(item)}
+${em`hidden`} — булевский флаг, по которому элемент должен исчезнуть из потока представления.
+Если проставлен в true, то для представления такого элемента используется синтетический элемент ${label.ref('empty-elem')`empty`}.
+По умолчанию hidden не задан и интерпретируется как false
+${end(item)}
+${end(list)}
 
 Далее приведён полный список стандартных элементов.
 
@@ -161,15 +178,18 @@ ${start(area.key('label-description'))}
 Например, чтобы сослаться на изображение, можно сделать лейбл и смотреть копию во всплывающем окне.
 
 
+Пример:
+Мы описали элемент ${label.ref('label-description')`label`} и ${label.ref('label-attrs')`список`} его атрибутов.
+Как видите, можно ссылаться на любые части книги, в том числе на те, что содержать сам лейбл, бесконечной рекурсии не возникнет.
+Можно ссылаться на места в книге как до лейбла, так и после лейбла.
+
+
 Атрибуты:
 ${list.key('label-attrs')`
-${item`${em`ref`}: string — ссылка на контент, должен совпадать с key у нужного элемента`}
-`}
-
-
-Пример:
-Мы только что описали элемент ${label.ref('label-description')`label`} и ${label.ref('label-attrs')`список`} его атрибутов.
-Как видите, можно ссылаться на любые части книги, в том числе на те, что содержать сам лейбл, бесконечной рекурсии не возникнет.
+    ${item`${em`ref`}: string — ссылка на контент, должен совпадать с key у нужного элемента`}
+    `}
+    
+    
 ${end(area)}
 
 
@@ -311,7 +331,13 @@ ${audio.src('/lenin.ogg').alt('lenin voice').position('start')`Запись го
 
 ${header.level(3)`Пространство форматирования`}
 Иногда требуется форматировать текст независимо от семантики.
-Наиболее часто используемые методы форматирования собраны в пространстве имён format.
+Наиболее часто используемые методы форматирования собраны в пространстве имён format. У всех элементов одинаковые атрибуты
+
+
+Атрибуты:
+${list`
+${item`${label.ref('type-LayoutProps')`LayoutProps`}`}
+`}
 
 
 ${header.level(3)`${counter.use('elem')}. format.b`}
@@ -320,6 +346,14 @@ ${format.b`Жирный`} текст.
 
 ${header.level(3)`${counter.use('elem')}. format.i`}
 ${format.i`Курсивный`} текст.
+
+
+${header.level(3)`${counter.use('elem')}. format.s`}
+${format.s`Зачёркнутый`} текст.
+
+
+${header.level(3)`${counter.use('elem')}. format.u`}
+${format.u`Подчёркнутый`} текст.
 
 
 ${header.level(3)`${counter.use('elem')}. format.sup`}
@@ -353,12 +387,6 @@ ${header.level(3)`${counter.use('elem')}. format.small`}
 Уровней размеров пока не предусмотрено, как и текста большего размера, чем стандартный.
 Но можно вкладывать элементы format.small друг в друга, и с каждым разом размер текста будет уменьшаться.
 Не злоупотребляйте этим.
-
-
-Атрибуты:
-${list`
-${item`${em`inline`}: boolean — в потоке текста или нет`}
-`}
 
 
 Пример:
@@ -447,7 +475,7 @@ ${header.level(3)`${counter.use('elem')}. area`}
 
 Атрибуты:
 ${list`
-${item`${em`inline`}: boolean — в потоке текста или нет, по умолчанию false`}
+${item`${label.ref('type-LayoutProps')`LayoutProps`}`}
 `}
 
 
@@ -510,6 +538,38 @@ ${header.level(3)`${counter.use('elem')}. separator`}
 Первая часть текста.
 ${separator}
 Вторая часть текста.
+
+
+${header.level(3)`${counter.use('elem')}. table`}
+Таблица.
+
+
+Атрибуты:
+${list`
+${item`${label.ref('type-LayoutProps')`LayoutProps`}`}
+${item`${label.ref('type-TextAlignProps')`TextAlignProps`}`}
+`}
+
+
+${header.level(3)`${counter.use('elem')}. row`}
+Строка таблицы.
+
+
+Атрибуты:
+${list`
+${item`${em`head`}: boolean — показывает, относится ли строка к шапке таблицы`}
+${item`${label.ref('type-TextAlignProps')`TextAlignProps`}`}
+`}
+
+
+${header.level(3)`${counter.use('elem')}. cell`}
+Ячейка таблицы.
+
+
+Атрибуты:
+${list`
+${item`${label.ref('type-TextAlignProps')`TextAlignProps`}`}
+`}
 
 
 ${header.level(3)`Хранилище данных`}
@@ -582,19 +642,26 @@ ${em`start`}: string — имя счётчика, который с момент
 ${item`
 ${em`use`}: string — имя счётчика, который должен быть использован.
 Текущее значение счётчика станет его дочерним элементом, а затем изменится на шаг счётчика.
-Только вместе с этим атрибутом счётчик видим.
+Вместе с этим атрибутом счётчик видим.
+`}
+${item`
+${em`last`}: string — имя счётчика, который должен быть использован.
+Текущее значение счётчика станет его дочерним элементом, но значение не поменяется в отличие от use.
+Вместе с этим атрибутом счётчик видим.
 `}
 ${item`
 ${em`end`}: string — имя счётчика, который нужно сбросить и прекратить учитывать.
 Полезно для ограничения локальных счётчиков, например в пределах одной главы, чтобы в следующей главе можно было завести новый счётчик с тем же именем.`}
 ${item`
-${em`initial`}: number — начальное значение счётчика, имеет смысл только если использует атрибут start.
-По умолчанию равен 0.`}
+${em`initial`}: number | string — начальное значение счётчика, имеет смысл только если использует атрибут start.
+По умолчанию равен 0 для числовых счётчиков и соответствующему символу для символьных.`}
 ${item`
 ${em`step`}: number — шаг счётчика, число, на которое счётчик меняется каждое использование.
 Может быть как положительным, так и отрицательным (тогда счётчик будет убывающий).
 Используется совместно с атрибутом start.
 По умолчанию равен 1.`}
+${item`
+${em`type`}: 'number' | 'char' | 'latin' | 'roman' | 'big-roman' | 'big-latin' | 'cyrillic' | 'big-cyrillic' — тип счётчика, по умолчанию счётчики числовые. Остальные типы основаны на кодах юникода соответствующих символов`}
 `}
 
 
@@ -606,14 +673,35 @@ ${em`step`}: number — шаг счётчика, число, на которое
 ${counter.start('counter-example').initial(1)}
 
 А вот использование — cписок:
-${area(...Array(10).fill(0).map(() => counter.use('counter-example')))}
+${area(...Array(100).fill(0).map((_, i) => area.inline()(i > 0 ? ', ' : '', counter.use('counter-example'))))}
 
-Они не выписаны вручную, 10 раз был использован счётчик counter-example с атрибутом use
+Они не выписаны вручную, 100 раз был использован счётчик counter-example с атрибутом use
 
 
 Ещё пример, счётчик с шагом -10 и начальным значением 100:
 ${counter.start('counter-example-2').initial(100).step(-10)}
-${area(...Array(15).fill(0).map(() => counter.use('counter-example-2')))}
+${area(...Array(15).fill(0).map((_, i) => area.inline()(i > 0 ? ', ' : '', counter.use('counter-example-2'))))}
+
+
+Счётчик с греческими буквами (type 'char', initial 'α')
+
+${counter.start`counter-example-3`.type('char').initial('α')}
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`},
+${counter.use`counter-example-3`}
+
+
+Счётчик от A до Я (type 'big-cyrillic')
+
+${counter.start`counter-example-4`.type('big-cyrillic')}
+${area(...Array(32).fill(0).map((_, i) => area.inline()(i > 0 ? ', ' : '', counter.use('counter-example-4'))))}
 
 
 ${header.level(3)`${counter.use('elem')}. resource`}
@@ -669,8 +757,10 @@ ${header.level(3)`${counter.use('elem')}. text`}
 Также желательно использовать ${label.ref('break-lines')`алгоритм перевода строк`}
 
 
-${header.level(3)`${counter.use('elem')}. empty`}
+${header.level(3).key('empty-elem')`${counter.use('elem')}. empty`}
 Пустой элемент.
+Используется для технических нужд и для элементов с свойством hidden.
+Например для html и других текстовых представлений (md, txt) это будет пустая строка.
 
 
 ${header.level(3)`${counter.use('elem')}. page`}

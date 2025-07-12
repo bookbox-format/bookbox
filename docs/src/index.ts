@@ -1,10 +1,10 @@
-import type { BookApi } from "@bookbox/preset-web";
+import type { js } from "@bookbox/preset-web";
 import {Internal} from './internal';
 
 const logo = './logo.svg';
 
 
-export default (api: BookApi) => {
+export default (api: js.BookApi) => {
     const { book, header, strong, image, authors, title, resource } = api;
 
     return book.root`

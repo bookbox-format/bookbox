@@ -19,10 +19,12 @@ ${_.strong`Strong`}
 
 ${_.em`Em`}
 
+${_.label.ref('code')`prev label`}
+
 
 ${_.code.lang('javascript')`const x = 1 + Math.random();`}
 
-${_.code.lang('javascript')`const x = 'longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong'`}
+${_.code.lang('javascript')`const x = 'longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong'`}
 
 ${_.code.lang('typescript').key('code')`
 import { HtmlToken } from "./model";
@@ -273,6 +275,22 @@ ${_.table.key`table-example``
   Очень широкая таблица истинности для отрицания с многократным дублированием колонок
   `}
 
+Пример с youtube
+${_.web.video.type('youtube').height('70%').src('https://www.youtube.com/embed/i-1PqnzaxrI')}
+
+Пример с vimeo
+${_.web.video.type('vimeo').height('50%').src('https://player.vimeo.com/video/317852618?h=7b3f53e9a8')}
+
+Пример с soundcloud
+${_.web.audio.type('soundcloud').src('https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1200979963&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true')`souncloud audio`}
+
+
+Пример с яндекс музыкой
+${_.web.audio.type('yandex.music').src('https://music.yandex.ru/iframe/#track/99670583/6245956')}
+
+Пример с телеграм
+${_.web.message.type`telegram`.height('100%').src('https://t.me/durov_russia/38?embed=1')}
+
 
 ${_.header.level(2)`Long text`}
 
@@ -355,11 +373,19 @@ Curabitur feugiat sem elit, sit amet vulputate eros dapibus nec. Morbi volutpat 
 
 In ac venenatis odio. Nulla eleifend lacus ut sagittis convallis. Sed mollis odio ut nunc vestibulum ullamcorper eget sed mi. Donec eget elit eget velit consequat auctor at et erat. Fusce ac nibh tristique, tempus tellus vel, sollicitudin nisi. Proin turpis odio, auctor id erat nec, egestas ornare eros. Aenean sollicitudin tincidunt elit, vehicula pretium eros ultricies sed.
 
+${_.header.level(3)`Long text sub 1`}
+
 Morbi finibus volutpat sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et convallis leo. Integer nec cursus libero. Duis id lectus elit. Sed vel magna eget leo rutrum tristique quis maximus est. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas sem lectus, imperdiet nec maximus in, pretium in massa. Fusce accumsan facilisis euismod. Suspendisse vel massa sed massa vehicula hendrerit sit amet eget orci. Fusce consectetur tincidunt varius.
+
+${_.header.level(3)`Long text sub 2`}
 
 Nam ipsum nulla, aliquet eget tristique vel, maximus et eros. Curabitur aliquet, ligula non porttitor placerat, felis enim tempor enim, eu egestas metus nunc non lorem. Duis id nisl scelerisque, convallis massa in, ornare tortor. Nunc scelerisque nisi a lectus sodales vulputate. Sed blandit justo sem, in suscipit augue tempus a. Phasellus imperdiet aliquet orci. Pellentesque blandit vulputate tempus. In tempor ante in lacus ullamcorper, in consectetur diam consectetur. Morbi luctus sapien non accumsan molestie. Integer felis ante, viverra vitae ornare eget, egestas non eros. Curabitur eleifend est convallis, ullamcorper ligula ac, aliquet quam. Vestibulum placerat tellus a massa finibus, nec iaculis sapien euismod. Fusce accumsan dolor purus, a fermentum sapien placerat id.
 
+${_.header.level(4)`Long text sub sub 1`}
+
 Maecenas ultricies neque et mauris scelerisque volutpat. Mauris hendrerit nulla dictum nunc ultrices tincidunt. Nulla maximus elit et quam dignissim, et cursus ante aliquet. Aenean pellentesque suscipit suscipit. Pellentesque interdum consequat nunc et pulvinar. Integer congue interdum mattis. Proin ut risus sapien.
+
+${_.header.level(4)`Long text sub sub 2`}
 
 Donec porta, eros vitae interdum gravida, justo nunc malesuada arcu, ac euismod erat tortor tempor augue. Suspendisse tempor porta lorem vitae viverra. Maecenas scelerisque vel elit vitae mollis. Nulla convallis euismod eros, vel suscipit odio malesuada a. Donec maximus mauris vitae ligula tristique vehicula. Phasellus aliquet iaculis odio, ac efficitur elit eleifend non. Aliquam accumsan felis quis consectetur porta. Suspendisse eget purus nec risus bibendum feugiat. Morbi posuere, leo non aliquet posuere, dolor mauris condimentum augue, quis vestibulum metus dui nec elit. Maecenas sit amet risus quis dolor finibus gravida a ac dolor. Praesent aliquet vel elit nec dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam lectus risus, commodo ac purus id, lobortis mattis diam. Donec pellentesque imperdiet tincidunt. Phasellus magna orci, sagittis sagittis augue quis, tempus varius enim. Nunc id sem vel odio faucibus mattis.
 

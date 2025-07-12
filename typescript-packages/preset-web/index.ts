@@ -1,4 +1,6 @@
 
 export * as core from '@bookbox/core';
-export * from '@bookbox/generator-js';
-export * from '@bookbox/view-html';
+export * as markup from '@bookbox/markup';
+export * as js from '@bookbox/generator-js';
+export * as bbm from '@bookbox/generator-bbm';
+export * as html from '@bookbox/view-html';

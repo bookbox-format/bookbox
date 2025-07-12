@@ -8,6 +8,8 @@ import { ExternalBuilder, ExternalProps } from './external';
 import { calculateResources, getActualResourceMap, ResourceOptions } from './resources';
 import { getIterableBook } from './iterableBook';
 import { calculateCounters } from './counters';
+import { expandMarkers } from './expandMarkers';
+import { mergeText } from './mergeText';
 
 export type BookData<T> = {
   tokens: T[];
@@ -77,14 +79,16 @@ export function createBook<Token>({
   resourceOptions,
 }: CreateBookParams<Token>): BookData<Token> {
   let schema: BookSchema = JSON.parse(JSON.stringify(originalSchema));
-  const builder = createBookBuilder(builderParams);
+  schema = expandMarkers(schema);
   addKeysToSchema(schema);
   calculateCounters(schema);
   calculateResources(schema, getActualResourceMap({ schema, resourceOptions }));
   prepareSchema(schema);
+  schema = mergeText(schema);
   const linkedSchema = getBookLinkedSchema(schema, true);
   const tokensSchema = getSchemaFromLinkedList(linkedSchema.tree);
 
+  const builder = createBookBuilder(builderParams);
   const getBuild = (currentStore: BookStore<Token>) => (localSchema: BookSchema) =>
     builder({ schema: localSchema, store: currentStore, externalBuilder, build: getBuild(currentStore) });
 
@@ -93,6 +97,7 @@ export function createBook<Token>({
   const meta = getBookMeta({ schema, store, builder, build });
 
   schema = tokensSchema;
+  schema = mergeText(schema);
 
   return {
     tokens: builder({ schema, store, externalBuilder, build }),
@@ -135,17 +140,18 @@ export function createBookBuilder<Token>({
     const getItemBuilder: (store: BookStore<Token>) => (item: BookItem) => Token = store => item => {
       // leaf case
       if (typeof item === 'string') {
-        return synteticElements.text({ raw: item, key: '' })({
+        const content = synteticElements.text({ raw: item, key: '' })({
           children: [],
           store,
           parents,
           build,
         });
+        return content;
       }
 
       // choose name
       let { name } = item;
-      if (emptyElementNameSet.has(name)) {
+      if (emptyElementNameSet.has(name) || item.props.hidden) {
         name = 'empty';
       }
 

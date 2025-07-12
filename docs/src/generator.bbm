@@ -1,0 +1,327 @@
+Язык разметки, разработанный специально для написания книг (но не ограничиваясь ими).
+Это обычный текст, внутри которого можно внедрять разметку и особые вставки.
+Данный раздел целиком написан на этом языке.
+Парсер грамматики можно изучить в пакете {link.href{https://www.npmjs.com/package/@bookbox/markup} @bookbox/markup}
+
+Вот как выглядит синтаксис
+
+
+{external.scope{bbm}
+For example, let's write the text from \{a.href\{https://ytsaurus.tech/docs/en/user-guide/dynamic-tables/dyn-query-language#accessing-containers\} the documentation YTsaurus\} as of 10.07.2024.
+
+\{header.level\{4\} Accessing containers\}
+
+If a table column has the \{code Composite\} data type, you can use the following syntax to access that column's fields:
+- To access \{code struct\} fields, use a dot.
+- To access \{code tuple\} fields, use a dot. Indexing is \{b zero-based\}.
+- To access \{code dict\} fields, use square brackets.
+- To access \{code list\} fields, use square brackets. Indexing is \{b zero-based\}.
+
+The correctness of accessing struct and tuple fields is checked \{b before starting\} the query's execution. The correctness of accessing map and list fields is checked \{b during\} the query's execution.
+
+To enable this syntax, make sure to set \{code syntax_version=2\} in the query parameters. Starting with this version of the syntax, strings are escaped with \{code backticks\}.
+
+To access containers, you need to specify the full column name, including the table alias.
+
+\{separator\}
+
+Пример вставки извне
+\{\{text\}\}
+
+Usage examples:
+\{code.block.lang\{sql\}
+t.struct.member,
+t.tuple.0,
+t.dict["key"],
+t.list[1+1]
+from \`//tmp/test\` as t;
+\}
+
+\{code.block.lang\{bash\}
+$ yt create table '//tmp/test' --attributes '\\\{dynamic=true; schema=<"unique_keys"=%true;"strict"=%true;>[\\\{name=a;sort_order=ascending;type=int64;\\\};\\\{name=b;type_v3=\\\{type_name=struct;members=[\\\{name=c;type=\\\{type_name=list;item=int64\\\}\\\}]\\\}\\\}]\\\}'
+$ yt mount-table --path '//tmp/test'
+$ echo '\\\{a=0;b=\\\{c=[]\\\}\\\}' | yt insert-rows --table '//tmp/test' --format yson
+$ echo '\\\{a=1;b=\\\{c=[1;2;3]\\\}\\\}' | yt insert-rows --table '//tmp/test' --format yson
+$ echo '\\\{a=2;b=\\\{c=[4]\\\}\\\}' | yt insert-rows --table '//tmp/test' --format yson
+
+$ yt select-rows 't.b.c from \`//tmp/test\` as t' --syntax-version 2 --format json
+\\\{"t.b.c":[]\\\}
+\\\{"t.b.c":[1,2,3]\\\}
+\\\{"t.b.c":[4]\\\}
+
+$ yt select-rows 't.b.c[0] from \`//tmp/test\` as t' --syntax-version 2 --format json
+\\\{"t.b.c[0]":null\\\}
+\\\{"t.b.c[0]":1\\\}
+\\\{"t.b.c[0]":4\\\}
+\}
+}
+
+Предположим, этот текст записан в файл book.bbm, тогда с помощью javascript пакета {link.href{https://www.npmjs.com/package/@bookbox/generator-bbm} @bookbox/generator-bbm} можно легко получить схему книги
+
+
+{code.lang{javascript}
+import \{readBook\} from '@bookbox/generator-bbm';
+
+const schema = await readBook('./book.bbm');
+}
+
+
+{header.level{4} Текст}
+В bbm текст это просто текст!
+Обычный txt файл без проблем переносится на bbm.
+Кодировка предполагается стандартная — UTF-8.
+
+
+Так как в bbm есть не только текст, но и теги и вставки, то нужно экранировать спец-символы.
+Таких символов всего два, это фигурные скобки {format:pre \{} и {format:pre \}}.
+Экранирующий символ это обратный слэш {format:pre \\}, он также экранирует сам себя.
+На остальные символы обратный слэш никак не действует, просто возвращает тот же символ.
+
+
+{header.level{4} Теги}
+В bbm элементы внутрь текста внедряются с помощью тегов.
+Есть обычные теги и служебные (у служебных имя начинается с символа решётки #).
+
+
+Каждый тег начинается с фигурной скобки {format:pre \{}, затем сразу идёт имя тега.
+В отличие от схемы данных, пространство имён отделяется двоеточием (но в итоговой схеме будет вместо него точка).
+Сами имена могут быть составлены только из латинских букв.
+Служебные теги аналогично, но имена начинаются с #.
+
+
+Теги могут иметь атрибуты, которые перечисляются через точку.
+Атрибуты без значения это булевы флаги, то есть если атрибут указан, он интерпретируется как true.
+Атрибуты со значением указывают своё значение в фигурных скобках. Это любой текст, который уже парсится в зависимости от атрибута.
+
+
+После объявления может быть указано тело тега, это обычный текст.
+Отделяется любыми пробельными символами, в том числе переносами строк.
+Тела может и не быть, например как у тега разделительной линии {format:pre \{separator\}}.
+
+
+В конце тег обязательно закрывается фигурной скобкой {format:pre \}}.
+
+
+Вот картинка, где собрано всё вместе
+
+{image.src{./tag.png} Описание частей тега}
+
+
+{area.key{bbm-markers}
+Маркеры начала и конца передаются нативно, через специальные пространства имён #start и #end.
+Они могут быть "приставлены" слева к любому имени тега (кроме служебных).
+
+Пример
+
+
+{external.scope{bbm}
+Text text
+\{#start:format:small.inline\}
+small text
+\{#end:format:small\}
+text text
+}
+
+Text text
+{#start:format:small.inline}
+small text
+{#end:format:small}
+text text
+}
+
+
+{area.key{bbm-comment}
+В языке нет специальных сиволом для комментариев, для этой цели используется служебный тег #comment
+
+
+{external.scope{bbm} Внутри\{#comment это комментарий\} предложения не видно текста комментария.}
+
+Внутри{#comment это комментарий} предложения не видно текста комментария.
+
+
+На самом деле игнорируется любой неизвестный служебный тег, но для #comment гарантируется, что он не будет занят под другие нужды в будущем.
+}
+
+{header.level{4} Вставки}
+Иногда нужно вставить в текст книги что-то на другом языке, чего нельзя узнать изнутри, либо утомительно делать разметку.
+Например по умолчанию в bbm вставки используются для математических формул на языке tex, но вставки можно обработать и другим образом.
+
+Пример
+
+
+{external.scope{bbm} Самая известная формула \{\{E=mc^2\}\}}
+
+
+Определяются как любой текст, обёрнутый в двойные фигурные скобки.
+Внутри вставки bbm экранирование не действует, но может действовать экранирование самого языка вставки.
+Если вам нужны двойные фигурные скобки внутри самой вставки, то просто отделите скобки пробелом, если это не мешает языку внутри, иначе воспользуйтесь экранированием языка вставки.
+
+Примеры
+
+
+{external.scope{bbm}
+Вещественные числа \{\{\\Bbb_\{R\}\}\} — плохо, две закрывающие фигурные скобки сразу после R, третья закрывающая скобка "повисла в воздухе".
+
+Вещественные числа \{\{\\Bbb_\{R\} \}\} — хорошо, две закрывающие фигурные скобки отделены, внутренняя скобка стала частью формулы tex.
+}
+
+{header.level{4} Импорты}
+Книгу в bbm формате можно разносить по разным файлам и склеивать с помощью тега #import
+
+{area.key{bbm-imports}
+Пример
+{external.scope{bbm}
+\{#import ./chapter_1.bbm\}
+
+\{#import ./chapter_2.bbm\}
+}
+
+Импорты читаются относительно файла, в котором написан импорт.
+}
+
+
+{header.level{4} Определения}
+Часто приходится повторять одни и те же конструкции много раз, например в математических книгах все теоремы оформлены одинаково.
+Ещё пример, во многих книгах единообразно нумеруются заголовки.
+
+
+Чтобы дать такую возможность, есть определения схем.
+Они напоминают макросы или функции в языках программирования.
+
+
+Вот как выглядит определение (определим абстрактную теорему)
+
+
+{external.scope{bbm}
+\{#def.name\{theorem\}
+\{#set:name area\}
+\{#set:start
+\{counter.start\{theorem\}.initial\{1\}\}
+\}
+\{format:b.inline
+\{#set:props:key \{#get:props:key\}_name\}
+Теорема
+\{counter.use\{theorem\}
+\{#set:props:key \{#get:props:key\}_link\}
+\}
+(\{#get:props:name\}).
+\}
+\{#get:children\}
+\}
+}
+{#def.name{theorem}
+{#set:name area}
+{#set:start
+{counter.start{theorem}.initial{1}}
+}
+{format:b.inline
+{#set:props:key {#get:props:key}_name}
+Теорема
+{counter.use{theorem}
+{#set:props:key {#get:props:key}_link}
+}
+({#get:props:name}).
+}
+{#get:children}
+}
+Такое определение никак не отображается, но служит инструкцией для последующего использования.
+В исходниках этого раздела я взял текст примера и его использую ровно так, как он написан.
+Синтаксис будет описан чуть ниже, но уже интуитивно ясно, что это элемент area со словом Теорема, её номером и названием.
+
+
+Вот собственно использование
+
+
+{external.scope{bbm}
+\{def:theorem.name\{теорема о неподвижной точке\}.key\{fixed-point\}
+Текст...
+\}
+\{def:theorem.name\{теорема о неполноте\}.key\{incompleteness\}
+Текст...
+\}
+}
+
+А вот и результат:
+
+{def:theorem.name{теорема о неподвижной точке}.key{fixed-point}
+Текст...
+}
+{def:theorem.name{теорема о неполноте}.key{incompleteness}
+Текст...
+}
+
+
+Как это всё работает: с помощью служебных тегов {format:pre #def},  {format:pre #set}, {format:pre #get} и {format:pre #not}.
+
+
+{area.key{bbm-def}
+Тег #def содержит в себе определение для нового тега, #set и #get работают только внутри него.
+В атрибут name нужно записать имя нового тега, и его можно будет использовать в книге в пространстве имён def.
+То есть запись {format:pre #def.name\{newtag\}} определит тег с именем {format:pre def:newtag}
+}
+
+
+{area.key{bbm-set}
+Тег #set умеет устанавливать нужные атрибуты для нового тега.
+Чтобы добавить атрибут, достаточно написать {format:pre #set:props:<имя атрибута>}
+Если тело тега #set:props:... равно строке true или false, то эти строки приводятся к логическим значениям.
+
+Кроме атрибутов, можно задать имя стандартного тега, в который в итоге должен превратится новый тег, в примере это просто area ({format:pre \{#set:name area\}}).
+
+Также можно задать элементы, которые следует поместить в начало книги через #set:start, это полезно для инициализации счётчиков.
+#set:start срабатывает только один раз.
+В нашем примере с теоремой мы инициализовали счётчик теорем.
+
+#set:children не существует, так как это и так обеспечивается вложенностью.
+Все элементы внутри #def, которые не #set, и будут дочерними для нового тега, тот есть определят его разметку.
+}
+
+
+{area.key{bbm-get}
+Тег #get может получать информацию из внешней разметки нового тега, например внешние атрибуты и дочерние элементы.
+Дочерние элементы получаем через #get:children, если нужно только строку, то через #get:children.string (чтобы можно было использовать разметку в внутренних атрибутах).
+}
+
+
+{area.key{bbm-not}
+Тег #not используется для инвертирования тел тегов.
+Если тело тега содержит строку false, то тег вернёт строку true, иначе для любой другой строки вернут строку false.
+Это может использоваться вместе с тегом #set:props:hidden для скрытия элементов по условию.
+}
+
+
+Как видно, в этих инструкциях нет циклов.
+Пока нет, чтобы не переусложнять.
+
+
+Определения нельзя вкладывать друг в друга, но можно объявлять в любом месте книги.
+Желательно выносить их в файл definitions.bbm, так будет обеспечена планируемая поддержка в редакторах кода (чтобы расширения IDE смогли спарсить определённый файл).
+
+
+Если попытаться использовать новый тег в пространстве def, у которого нет определения, то такой тег будет проигнорирован, в отличии от ошибки при попытке использовать незнакомый тег верхнего уровня.
+
+
+{external.scope{bbm}
+Игнорирование — \{def:badtag text\}.
+Ошибка — \{badtag text\}.
+}
+
+Игнорирование — {def:badtag text}.
+Ошибка — {badtag text}.
+
+
+{header.level{4} Обзор всех служебных тегов}
+
+{#start:list}
+{item #start, #end — добавляют к элементу маркеры start и end, {label.ref{bbm-markers} подробнее} }
+{item #comment — комментарий, не попадает в книгу, {label.ref{bbm-comment} подробнее} }
+{item #import — импортирует часть книги по пути, указанном в теле тега, {label.ref{bbm-imports} подробнее} }
+{item #def — тег определения пользовательских тегов в пространстве имён def, {label.ref{bbm-def} подробнее} }
+{item #set — инструкция установки данных, {label.ref{bbm-set} подробнее} }
+{item #get — инструкция получения данных, {label.ref{bbm-get} подробнее} }
+{item #not — инструкция инвертирования тела тега, {label.ref{bbm-not} подробнее} }
+{#end:list}
+
+
+{header.level{4} Расширения для IDE}
+На данный момент доступна поддержка в VSCode — расширение {link.href{https://marketplace.visualstudio.com/items?itemName=bookbox-format.bookbox-markup-language} Bookbox markup language}

@@ -7,13 +7,13 @@
   "module": "dist/docs.esm.js",
   "type": "module",
   "scripts": {
-    "copy-resources": "find src -type f ! -name '*.ts' -a ! -name '*.mdx' -exec cp '{}' dist ';'",
+    "copy-resources": "find src -type f ! -name '*.ts' -a ! -name '*.bbm' -exec cp '{}' dist ';'",
     "build-code": "vite build; npm run copy-resources; cp ./dist/docs.es.js ./dist/docs.es.mjs",
     "build-schema": "SOURCE=../dist/docs.es.mjs TARGET_PREFIX=./dist/docs node scripts/generateSchema.mjs",
     "build-view": "node scripts/genHtmlDocs.mjs",
     "build": "npm run build-code; npm run build-schema; npm run build-view",
-    "listen-deps": "onchange -d 3000 'node_modules/@bookbox/core/build/esm/index.js' 'node_modules/@bookbox/generator-js/build/esm/index.js' 'node_modules/@bookbox/view-html/build/esm/index.js' --no-exclude -- npm run build",
-    "listen-code": "onchange -d 1000 'src/**/*.ts' 'src/**/*.mdx' -- npm run build",
+    "listen-deps": "onchange -d 3000 'node_modules/@bookbox/core/dist/index.js' 'node_modules/@bookbox/generator-js/build/esm/index.js' 'node_modules/@bookbox/view-html/build/esm/index.js' --no-exclude -- npm run build",
+    "listen-code": "onchange -d 1000 'src/**/*.ts' 'src/**/*.bbm' -- npm run build",
     "dev": "npm run listen-deps & npm run listen-code"
   },
   "devDependencies": {
@@ -25,6 +25,6 @@
     "yaml": "^2.1.1"
   },
   "dependencies": {
-    "@bookbox/preset-web": "^0.1.0"
+    "@bookbox/preset-web": "^0.3.0"
   }
 }

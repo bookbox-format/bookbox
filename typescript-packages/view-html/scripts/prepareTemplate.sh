@@ -9,7 +9,7 @@ mv preparedTemplate/src/bookTemplate.html preparedTemplate/src/index.html
 npx vite build
 node generateBookTemplate.js
 
-rm -Rf preparedTemplate
+# rm -Rf preparedTemplate
 
 echo "css to js"
 node prepareCss.js
